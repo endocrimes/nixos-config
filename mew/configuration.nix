@@ -26,6 +26,9 @@
   boot.tmpOnTmpfs = true;
   hardware.cpu.intel.updateMicrocode = true;
 
+  # Dammit Valve get your shit together
+  hardware.opengl.driSupport32Bit = true;
+
   powerManagement.enable = true;
 
   networking.hostName = "mew";
