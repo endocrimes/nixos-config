@@ -35,25 +35,40 @@
   networking.hostId = "41434142";
   networking.networkmanager.enable = true;
 
+  services.avahi = {
+    enable = true;
+    ipv6 = true;
+    nssmdns = true;
+  };
+
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
   environment.systemPackages = with pkgs; [
      git
      wget
-     vim
      firefox
      zsh
      acpilight
      feh
      pasystray
      paprefs
+     pamixer
+     pavucontrol
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+
+  # Enable dconf for pulseaudio settings
+  programs.dconf.enable = true;
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+  };
 
   # List services that you want to enable:
 
@@ -67,7 +82,18 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    extraConfig = "
+      [General]
+      Enable=Source,Sink,Media,Socket
+    ";
+  };
+
+  hardware.pulseaudio = {
+    enable = true;
+    package = pkgs.pulseaudioFull;
+  };
 
   # Enable the X11 windowing system.
   services.xserver = {
@@ -137,7 +163,7 @@
 
   users.users.danielle = {
      isNormalUser = true;
-     extraGroups = [ "wheel" "video" "docker" ]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "video" "docker" "avahi"];
      shell = pkgs.zsh;
   };
 
