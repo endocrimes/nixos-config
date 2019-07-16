@@ -35,12 +35,6 @@
   networking.hostId = "41434142";
   networking.networkmanager.enable = true;
 
-  services.avahi = {
-    enable = true;
-    ipv6 = true;
-    nssmdns = true;
-  };
-
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
@@ -55,6 +49,7 @@
      paprefs
      pamixer
      pavucontrol
+     yubikey-personalization
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -75,12 +70,23 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  networking.firewall.enable = false;
+  ## :fire: :brick:
+  networking.firewall = {
+    enable = true;
+    allowPing = true;
+  };
 
-  # Enable CUPS to print documents.
+  ## Zeroconf networking for pulseaudio discovery
+  services.avahi = {
+    enable = true;
+    ipv6 = true;
+    nssmdns = true;
+  };
+
+  ## Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound.
+  ## Enable sound.
   sound.enable = true;
   hardware.bluetooth = {
     enable = true;
@@ -89,13 +95,12 @@
       Enable=Source,Sink,Media,Socket
     ";
   };
-
   hardware.pulseaudio = {
     enable = true;
     package = pkgs.pulseaudioFull;
   };
 
-  # Enable the X11 windowing system.
+  ## Enable the X11 windowing system.
   services.xserver = {
     enable = true;
     layout = "us";
@@ -122,6 +127,11 @@
       };
     };
 
+    ## Enable touchpad support.
+    libinput = {
+      enable = true;
+      naturalScrolling = true;
+    };
 
     # Fix screen tearing
     videoDrivers = [ "intel" ];
@@ -136,9 +146,6 @@
     twemoji-color-font
   ];
 
-  # Enable touchpad support.
-  services.xserver.libinput.enable = true;
-  services.xserver.libinput.naturalScrolling = true;
 
   services.logind.lidSwitch = "hybrid-sleep";
   services.logind.lidSwitchExternalPower = "suspend";
@@ -157,13 +164,17 @@
     provider = "geoclue2";
   };
 
+  services.udev.packages = with pkgs; [
+    yubikey-personalization
+  ];
+
   virtualisation.docker.enable = true;
 
   environment.shells = [ pkgs.zsh ];
 
   users.users.danielle = {
      isNormalUser = true;
-     extraGroups = [ "wheel" "video" "docker" "avahi"];
+     extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" ];
      shell = pkgs.zsh;
   };
 
