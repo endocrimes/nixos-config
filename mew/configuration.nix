@@ -1,11 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -14,13 +13,11 @@
 
   hardware.brightnessctl.enable = true;
 
-  boot.initrd.luks.devices = [
-    {
-      name = "env-pv";
-      preLVM = true;
-      device = "/dev/nvme0n1p2";
-    }
-  ];
+  boot.initrd.luks.devices = [{
+    name = "env-pv";
+    preLVM = true;
+    device = "/dev/nvme0n1p2";
+  }];
 
   boot.zfs.devNodes = "/dev";
   boot.tmpOnTmpfs = true;
@@ -39,23 +36,26 @@
   time.timeZone = "Europe/Amsterdam";
 
   environment.systemPackages = with pkgs; [
-     git
-     wget
-     firefox
-     zsh
-     acpilight
-     feh
-     pasystray
-     paprefs
-     pamixer
-     pavucontrol
-     yubikey-personalization
+    git
+    wget
+    firefox
+    zsh
+    acpilight
+    feh
+    pasystray
+    paprefs
+    pamixer
+    pavucontrol
+    yubikey-personalization
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.mtr.enable = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   # Enable dconf for pulseaudio settings
   programs.dconf.enable = true;
@@ -90,10 +90,11 @@
   sound.enable = true;
   hardware.bluetooth = {
     enable = true;
-    extraConfig = "
-      [General]
-      Enable=Source,Sink,Media,Socket
-    ";
+    extraConfig = ''
+
+            [General]
+            Enable=Source,Sink,Media,Socket
+          '';
   };
   hardware.pulseaudio = {
     enable = true;
@@ -116,9 +117,7 @@
     };
     windowManager = {
       default = "i3";
-      i3 = {
-        enable = true;
-      };
+      i3 = { enable = true; };
     };
     displayManager = {
       lightdm = {
@@ -142,10 +141,7 @@
     useGlamor = true;
   };
 
-  fonts.fonts = with pkgs; [
-    twemoji-color-font
-  ];
-
+  fonts.fonts = with pkgs; [ twemoji-color-font ];
 
   services.logind.lidSwitch = "hybrid-sleep";
   services.logind.lidSwitchExternalPower = "suspend";
@@ -164,18 +160,16 @@
     provider = "geoclue2";
   };
 
-  services.udev.packages = with pkgs; [
-    yubikey-personalization
-  ];
+  services.udev.packages = with pkgs; [ yubikey-personalization ];
 
   virtualisation.docker.enable = true;
 
   environment.shells = [ pkgs.zsh ];
 
   users.users.danielle = {
-     isNormalUser = true;
-     extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" ];
-     shell = pkgs.zsh;
+    isNormalUser = true;
+    extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" ];
+    shell = pkgs.zsh;
   };
 
   nixpkgs.config.allowUnfree = true;
