@@ -8,8 +8,12 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = false;
-  boot.extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.useOSProber = true;
+  boot.extraModulePackages = [
+    config.boot.kernelPackages.exfat-nofuse
+    config.boot.kernelPackages.wireguard
+  ];
 
   hardware.brightnessctl.enable = true;
 
@@ -31,6 +35,30 @@
   networking.hostName = "mew";
   networking.hostId = "41434142";
   networking.networkmanager.enable = true;
+
+  networking.wireguard.interfaces = {
+    wg0 = {
+      ips = [ "10.192.122.2/32" ];
+      privateKeyFile = "/etc/boot-secrets/wg0-key";
+      peers = [
+        {
+          publicKey = "rIIZ3OBz6LNsSgGI/oDJCf4Aqd5YIkjmrFOcigGoim4=";
+
+          # Forward all the traffic via VPN.
+          allowedIPs = [ "0.0.0.0/1" "::/1" ];
+
+          # Or forward only particular subnets
+          #allowedIPs = [ "10.100.0.1" "91.108.12.0/22" ];
+
+          # Set this to the server IP and port.
+          endpoint = "vpn.terrible.systems:51820";
+
+          # Send keepalives every 25 seconds. Important to keep NAT tables alive.
+          persistentKeepalive = 25;
+        }
+      ];
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
