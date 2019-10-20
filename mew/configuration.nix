@@ -75,6 +75,8 @@
     pamixer
     pavucontrol
     yubikey-personalization
+    davfs2
+    blueman
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -97,6 +99,9 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  # Enable usbmuxd for iOS tethering
+  services.usbmuxd.enable = true;
 
   ## :fire: :brick:
   networking.firewall = {
@@ -127,6 +132,8 @@
   hardware.pulseaudio = {
     enable = true;
     package = pkgs.pulseaudioFull;
+    extraModules = [ pkgs.pulseaudio-modules-bt ];
+    zeroconf.discovery.enable = true;
   };
 
   ## Enable the X11 windowing system.
@@ -191,12 +198,22 @@
   services.udev.packages = with pkgs; [ yubikey-personalization ];
 
   virtualisation.docker.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "danielle" ];
 
   environment.shells = [ pkgs.zsh ];
 
+  users.groups.davfs2 = {};
+  users.groups.dialout = {};
+
+  users.users.davfs2 = {
+    isNormalUser = false;
+    extraGroups = [ "davfs2" ];
+  };
+
   users.users.danielle = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" ];
+    extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" "davfs2" ];
     shell = pkgs.zsh;
   };
 
