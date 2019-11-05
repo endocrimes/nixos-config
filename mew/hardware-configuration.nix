@@ -14,7 +14,7 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "rtank/root";
+    { device = "rtank";
       fsType = "zfs";
     };
 
