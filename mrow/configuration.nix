@@ -31,9 +31,8 @@
   environment.systemPackages = with pkgs; [
     git
     wget
-    firefox
+    vim
     zsh
-    feh
   ];
 
   programs.mtr.enable = true;
