@@ -50,7 +50,6 @@
     445 139 # samba
   ];
   networking.firewall.allowedUDPPorts = [
-    22 80 443
     137 138 # samba
   ];
   networking.firewall.allowPing = true;
