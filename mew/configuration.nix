@@ -4,6 +4,10 @@
   imports = [ # Include the results of the hardware scan.
     <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
     ./hardware-configuration.nix
+    ../imports/defaults.nix
+    ../imports/graphical.nix
+    ../imports/audio.nix
+    ../imports/yubikey.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -34,7 +38,6 @@
 
   networking.hostName = "mew";
   networking.hostId = "41434142";
-  networking.networkmanager.enable = true;
 
   networking.wireguard.interfaces = {
     wg0 = {
@@ -60,28 +63,13 @@
     };
   };
 
-  # Set your time zone.
-  time.timeZone = "Europe/Amsterdam";
-
   environment.systemPackages = with pkgs; [
-    git
-    wget
     firefox
-    zsh
     acpilight
     feh
-    pasystray
-    paprefs
-    pamixer
-    pavucontrol
-    yubikey-personalization
     davfs2
-    blueman
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
@@ -90,15 +78,7 @@
   # Enable dconf for pulseaudio settings
   programs.dconf.enable = true;
 
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-  };
-
   # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   # Enable usbmuxd for iOS tethering
   services.usbmuxd.enable = true;
@@ -108,75 +88,6 @@
     enable = true;
     allowPing = true;
   };
-
-  ## Zeroconf networking for pulseaudio discovery
-  services.avahi = {
-    enable = true;
-    ipv6 = true;
-    nssmdns = true;
-  };
-
-  ## Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  ## Enable sound.
-  sound.enable = true;
-  hardware.bluetooth = {
-    enable = true;
-    extraConfig = ''
-
-            [General]
-            Enable=Source,Sink,Media,Socket
-          '';
-  };
-  hardware.pulseaudio = {
-    enable = true;
-    package = pkgs.pulseaudioFull;
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
-    zeroconf.discovery.enable = true;
-  };
-
-  ## Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    xkbOptions = "eurosign:e, caps:ctrl_modifier, altwin:swap_alt_win";
-    desktopManager = {
-      default = "xfce";
-      xterm.enable = false;
-      xfce = {
-        enable = true;
-        noDesktop = true;
-        enableXfwm = false;
-      };
-    };
-    windowManager = {
-      default = "i3";
-      i3 = { enable = true; };
-    };
-    displayManager = {
-      lightdm = {
-        enable = true;
-        background = "/etc/background-image.png";
-      };
-    };
-
-    ## Enable touchpad support.
-    libinput = {
-      enable = true;
-      naturalScrolling = true;
-    };
-
-    # Fix screen tearing
-    videoDrivers = [ "intel" ];
-    deviceSection = ''
-      Option "DRI" "2"
-      Option "TearFree" "true"
-    '';
-    useGlamor = true;
-  };
-
-  fonts.fonts = with pkgs; [ twemoji-color-font ];
 
   services.logind.lidSwitch = "hybrid-sleep";
   services.logind.lidSwitchExternalPower = "suspend";
@@ -195,13 +106,9 @@
     provider = "geoclue2";
   };
 
-  services.udev.packages = with pkgs; [ yubikey-personalization ];
-
   virtualisation.docker.enable = true;
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "danielle" ];
-
-  environment.shells = [ pkgs.zsh ];
 
   users.groups.davfs2 = {};
   users.groups.dialout = {};
@@ -216,8 +123,6 @@
     extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" "davfs2" ];
     shell = pkgs.zsh;
   };
-
-  nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "19.03";
 }

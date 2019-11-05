@@ -4,13 +4,13 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../imports/defaults.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.tmpOnTmpfs = true;
-  
 
   networking.hostName = "mrow"; # Define your hostname.
   networking.hostId = "44414e49";
@@ -23,27 +23,6 @@
     monthly = 3;
   };
 
-  # Set your time zone.
-  time.timeZone = "Europe/Berlin";
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    git
-    wget
-    vim
-    zsh
-  ];
-
-  programs.mtr.enable = true;
-  programs.zsh.enable = true;
-  programs.zsh.enableCompletion = true;
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     22 80 443
@@ -54,18 +33,13 @@
   ];
   networking.firewall.allowPing = true;
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   virtualisation.docker.enable = true;
-  
-  environment.shells = [ pkgs.zsh ];
-  
+
   users.users.danielle = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "dialout" ];
     shell = pkgs.zsh;
-    hashedPassword = builtins.readFile ./passwd-danielle; 
+    hashedPassword = builtins.readFile ./passwd-danielle;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -115,7 +89,7 @@
     enable = true;
     securityType = "user";
     extraConfig = ''
-      hosts allow = 192.168.0 localhost 192.168.178.0/24 
+      hosts allow = 192.168.0 localhost 192.168.178.0/24
       hosts deny = 0.0.0.0/0
     '';
     shares = {
