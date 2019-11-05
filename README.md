@@ -13,7 +13,7 @@ using [home-manager][home-manager].
 | name | description |
 | ---- | ----------- |
 | mew  | Personal Thinkpad |
-| sputnik | Workstation |
+| mrow | HPE Proliant Gen10 NAS |
 
 [dotfiles]: https://github.com/endocrimes/dotfiles
 [home-manager]: https://github.com/rycee/home-manager
