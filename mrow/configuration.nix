@@ -26,6 +26,7 @@
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     22 80 443
+    8080 # calibre
     445 139 # samba
   ];
   networking.firewall.allowedUDPPorts = [
@@ -43,6 +44,11 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+
+  services.calibre-server = {
+    enable = true;
+    libraryDir = "/spool/storage/calibre-library";
+  };
 
   services.nextcloud = {
     enable = true;
