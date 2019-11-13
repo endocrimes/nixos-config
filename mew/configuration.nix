@@ -47,11 +47,10 @@
         {
           publicKey = "rIIZ3OBz6LNsSgGI/oDJCf4Aqd5YIkjmrFOcigGoim4=";
 
-          # Forward all the traffic via VPN.
-          allowedIPs = [ "0.0.0.0/1" "::/1" ];
-
-          # Or forward only particular subnets
-          #allowedIPs = [ "10.100.0.1" "91.108.12.0/22" ];
+          allowedIPs = [
+            # Forward all traffic from the wireguard IP range
+            "10.192.122.0/24"
+          ];
 
           # Set this to the server IP and port.
           endpoint = "vpn.terrible.systems:51820";
