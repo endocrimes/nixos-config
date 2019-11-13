@@ -5,16 +5,13 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../imports/defaults.nix
+      ../imports/server.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.tmpOnTmpfs = true;
-
-  boot.kernel.sysctl = {
-     "kernel.perf_event_paranoid" = lib.mkOverride 50 0;
-  };
 
   networking.hostName = "mrow"; # Define your hostname.
   networking.hostId = "44414e49";
@@ -51,11 +48,6 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-
-  services.prometheus.exporters.node = {
-    enable = true;
-    openFirewall = true;
-  };
 
   services.calibre-server = {
     enable = true;
