@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Must configure perf_event_paranoid to allow the node exporter to pull useful
