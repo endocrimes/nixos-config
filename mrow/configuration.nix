@@ -50,7 +50,7 @@
   nixpkgs.config.allowUnfree = true;
 
   services.calibre-server = {
-    enable = true;
+    enable = false;
     libraryDir = "/spool/storage/calibre-library";
   };
 
