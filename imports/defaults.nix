@@ -17,6 +17,10 @@
     enableCompletion = true;
   };
 
+  programs.fish = {
+    enable = true;
+  };
+
   ## Services
 
   services.avahi = {
