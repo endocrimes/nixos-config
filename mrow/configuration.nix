@@ -26,7 +26,7 @@
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
-    22 80 443
+    22 80 443 1443
     8080 # calibre
     445 139 # samba
   ];
@@ -34,6 +34,8 @@
     137 138 # samba
   ];
   networking.firewall.allowPing = true;
+
+  services.openssh.ports = [22 1433];
 
   virtualisation.docker.enable = true;
 
