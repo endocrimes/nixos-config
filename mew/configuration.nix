@@ -62,6 +62,11 @@
     };
   };
 
+  networking.networkmanager = {
+    enable = true;
+    wifi.macAddress = "random"; /* Randomise the MAC address between connections */
+  };
+
   environment.systemPackages = with pkgs; [
     firefox
     acpilight
