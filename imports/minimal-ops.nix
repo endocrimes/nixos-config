@@ -11,6 +11,7 @@
     dnsutils
     lsof
     telnet
+    nmap
   ];
 
   programs.mtr.enable = true;
