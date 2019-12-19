@@ -12,6 +12,7 @@
     lsof
     telnet
     nmap
+    lm_sensors
   ];
 
   programs.mtr.enable = true;

@@ -35,7 +35,11 @@
   ];
   networking.firewall.allowPing = true;
 
-  services.openssh.ports = [22 1433];
+  services.openssh = {
+    ports = [22 1433];
+
+    passwordAuthentication = false;
+  };
 
   virtualisation.docker.enable = true;
 
@@ -80,6 +84,22 @@
       dbname = "nextcloud";
       adminpassFile = "/etc/nixos/passwd-nextcloud";
       adminuser = "root";
+    };
+  };
+
+  services.minio = {
+    enable = true;
+    listenAddress = ":9002";
+    dataDir = "/spool/storage/minio/data";
+    configDir = "/spool/storage/minio/config";
+    region = "eu-dani-1";
+  };
+
+  services.nginx.virtualHosts."minio.terrible.systems" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:9002";
     };
   };
 
