@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  fonts.fonts = with pkgs; [ twemoji-color-font ];
+  fonts.fonts = with pkgs; [ twemoji-color-font nerdfonts ];
 
   services.xserver = {
     enable = true;
@@ -10,6 +10,7 @@
     desktopManager = {
       default = "xfce";
       xterm.enable = false;
+      plasma5.enable = false;
       xfce = {
         enable = true;
         noDesktop = true;
