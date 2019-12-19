@@ -36,6 +36,17 @@
 
   powerManagement.enable = true;
 
+  # Fix font sizes in X
+  services.xserver.dpi = 210;
+  fonts.fontconfig.dpi = 210;
+
+  # Fix sizes of GTK/GNOME ui elements
+  # environment.variables = {
+  #   GDK_SCALE = lib.mkDefault "1.5";
+  #   GDK_DPI_SCALE= lib.mkDefault "0.75";
+  # };
+
+
   networking.hostName = "mew";
   networking.hostId = "41434142";
 
@@ -105,9 +116,9 @@
     ];
   };
 
+  location.provider = "geoclue2";
   services.redshift = {
     enable = true;
-    provider = "geoclue2";
   };
 
   virtualisation.docker.enable = true;
@@ -124,7 +135,7 @@
 
   users.users.danielle = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" "davfs2" ];
+    extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" "davfs2" "journalctl" ];
     shell = pkgs.zsh;
   };
 
