@@ -31,6 +31,13 @@
   boot.tmpOnTmpfs = true;
   hardware.cpu.intel.updateMicrocode = true;
 
+  services.zfs.autoScrub.enable = true;
+  services.zfs.autoSnapshot = {
+    enable = true;
+    frequent = 8;
+    monthly = 1;
+  };
+
   # Dammit Valve get your shit together
   hardware.opengl.driSupport32Bit = true;
 
