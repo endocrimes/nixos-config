@@ -100,8 +100,6 @@
   # Enable dconf for pulseaudio settings
   programs.dconf.enable = true;
 
-  # List services that you want to enable:
-
   # Enable usbmuxd for iOS tethering
   services.usbmuxd.enable = true;
 
