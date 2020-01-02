@@ -95,6 +95,12 @@
     region = "eu-dani-1";
   };
 
+  services.nix-serve = {
+    enable = true;
+    port = 9003;
+    secretKeyFile = "/var/bincache.d/cache-priv-key.pem";
+  };
+
   services.nginx.virtualHosts."minio.terrible.systems" = {
     enableACME = true;
     forceSSL = true;
@@ -115,6 +121,17 @@
       proxyPass = "http://192.168.178.72:32400";
     };
   };
+
+  services.nginx.virtualHosts."nixcache.infra.terrible.systems" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/".extraConfig = ''
+      proxy_pass http://localhost:${toString config.services.nix-serve.port};
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    '';
+  }; 
 
   services.postgresql = {
     enable = true;
