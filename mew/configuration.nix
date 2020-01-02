@@ -18,6 +18,7 @@
     config.boot.kernelPackages.exfat-nofuse
     config.boot.kernelPackages.wireguard
   ];
+  boot.plymouth.enable = true;
 
   hardware.brightnessctl.enable = true;
 
