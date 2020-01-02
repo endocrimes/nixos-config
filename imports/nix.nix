@@ -13,5 +13,15 @@
     extraOptions = ''
       auto-optimise-store = true
     '';
+
+    binaryCaches = [
+      "https://nixcache.infra.terrible.systems/"
+    ];
+    trustedBinaryCaches = [
+      "https://nixcache.infra.terrible.systems/"
+    ];
+    binaryCachePublicKeys = [
+      "nixcache.infra.terrible.systems:BXjTXh35v6pyOf6kjkhd2T2Z1hXrCa4j/64HCwbZ5Mw="
+    ];
   };
 }

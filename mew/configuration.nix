@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
-{
+let stable = import <nixos-stable> { };
+in {
   imports = [ # Include the results of the hardware scan.
     <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
     ./hardware-configuration.nix
@@ -91,6 +92,9 @@
     acpilight
     feh
     davfs2
+
+    # https://github.com/NixOS/nixpkgs/issues/72034
+    stable.nix
   ];
 
   programs.gnupg.agent = {
