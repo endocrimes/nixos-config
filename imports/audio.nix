@@ -4,11 +4,10 @@
   sound.enable = true;
   hardware.bluetooth = {
     enable = true;
-    extraConfig = ''
-
+    config = ''
             [General]
             Enable=Source,Sink,Media,Socket
-          '';
+    '';
   };
   hardware.pulseaudio = {
     enable = true;
@@ -17,11 +16,12 @@
     zeroconf.discovery.enable = true;
   };
 
+  services.blueman.enable = true;
+
   environment.systemPackages = with pkgs; [
     pasystray
     paprefs
     pamixer
     pavucontrol
-    blueman
   ];
 }
