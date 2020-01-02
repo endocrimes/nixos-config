@@ -43,9 +43,15 @@
 
   virtualisation.docker.enable = true;
 
+  users.groups.nix-trusted = {};
+
+  nix = {
+    trustedUsers = [ "@nix-trusted" ];
+  };
+
   users.users.danielle = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "dialout" ];
+    extraGroups = [ "wheel" "docker" "dialout" "nix-trusted" ];
     shell = pkgs.zsh;
     hashedPassword = builtins.readFile ./passwd-danielle;
     openssh.authorizedKeys.keys = [
@@ -55,6 +61,7 @@
 
   users.users.maxine = {
    isNormalUser = true;
+   extraGroups = [ "nix-trusted" ];
    shell = pkgs.fish;
    openssh.authorizedKeys.keys = [
      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDmex7rvB7BFd9OxQHfgqKogiN69kHvixCzWWEGh5oY"
