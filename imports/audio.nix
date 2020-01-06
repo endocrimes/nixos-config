@@ -4,7 +4,7 @@
   sound.enable = true;
   hardware.bluetooth = {
     enable = true;
-    config = ''
+    extraConfig = ''
             [General]
             Enable=Source,Sink,Media,Socket
     '';
