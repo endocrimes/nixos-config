@@ -17,9 +17,11 @@
   ];
 
   security.pam.u2f = {
-    enable = true;
     control = "sufficient";
     cue = true;
+  };
+  security.pam.services.sudo = {
+    u2fAuth = true;
   };
 
   services.pcscd.enable = true;
