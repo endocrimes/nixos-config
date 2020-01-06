@@ -16,5 +16,11 @@
     yubikey-personalization
   ];
 
+  security.pam.u2f = {
+    enable = true;
+    control = "sufficient";
+    cue = true;
+  };
+
   services.pcscd.enable = true;
 }
