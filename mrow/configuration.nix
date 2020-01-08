@@ -44,9 +44,16 @@
   virtualisation.docker.enable = true;
 
   users.groups.nix-trusted = {};
+  users.groups.media = {};
 
   nix = {
     trustedUsers = [ "@nix-trusted" ];
+  };
+
+  users.users.ellipse = {
+    isNormalUser = true;
+    extraGroups = [ "media" ];
+    initialHashedPassword = builtins.readFile ./passwd-ellipse;
   };
 
   users.users.danielle = {
@@ -159,6 +166,14 @@
     shares = {
       storage = {
         path = "/spool/storage";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+      };
+      media = {
+        path = "/spool/storage/media";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
