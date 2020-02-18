@@ -1,12 +1,25 @@
 { config, pkgs, lib, ... }:
 
+let unstable = import <unstable> {
+    # Include the nixos config when importing nixos-unstable
+    # But remove packageOverrides to avoid infinite recursion
+    config = removeAttrs config.nixpkgs.config [ "packageOverrides" ];
+}; in
 {
+  disabledModules = [ "services/web-apps/nextcloud.nix" ];
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../imports/defaults.nix
       ../imports/server.nix
+      # Override the nextcloud module
+      <unstable/nixos/modules/services/web-apps/nextcloud.nix>
     ];
+
+  # Override select packages to use the unstable channel
+  nixpkgs.config.packageOverrides = pkgs: {
+    nextcloud = unstable.nextcloud;
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
