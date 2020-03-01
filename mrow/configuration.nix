@@ -81,7 +81,7 @@ let unstable = import <unstable> {
 
   users.users.maxine = {
    isNormalUser = true;
-   extraGroups = [ "nix-trusted" ];
+   extraGroups = [ "nix-trusted" "wheel" "docker" ];
    shell = pkgs.fish;
    openssh.authorizedKeys.keys = [
      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDmex7rvB7BFd9OxQHfgqKogiN69kHvixCzWWEGh5oY"
