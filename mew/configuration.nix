@@ -9,6 +9,7 @@ in {
     ../imports/graphical.nix
     ../imports/audio.nix
     ../imports/yubikey.nix
+    ../imports/remote-builds
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -22,13 +23,12 @@ in {
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.plymouth.enable = true;
 
-  hardware.brightnessctl.enable = true;
-
-  boot.initrd.luks.devices = [{
-    name = "env-pv";
-    preLVM = true;
-    device = "/dev/nvme0n1p2";
-  }];
+  boot.initrd.luks.devices = {
+    env-pv = {
+      preLVM = true;
+      device = "/dev/nvme0n1p2";
+    };
+  };
 
   boot.zfs.devNodes = "/dev";
   boot.tmpOnTmpfs = true;
@@ -93,6 +93,7 @@ in {
     acpilight
     feh
     davfs2
+    brightnessctl
 
     # https://github.com/NixOS/nixpkgs/issues/72034
     stable.nix

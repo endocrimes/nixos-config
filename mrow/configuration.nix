@@ -11,7 +11,9 @@ let unstable = import <unstable> {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../imports/defaults.nix
-      ../imports/server.nix
+     ../imports/server.nix
+     ../imports/remote-builds
+
       # Override the nextcloud module
       <unstable/nixos/modules/services/web-apps/nextcloud.nix>
     ];
