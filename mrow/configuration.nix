@@ -18,6 +18,8 @@ let unstable = import <unstable> {
       <unstable/nixos/modules/services/web-apps/nextcloud.nix>
     ];
 
+  services.nfs.server.enable = true;
+
   # Override select packages to use the unstable channel
   nixpkgs.config.packageOverrides = pkgs: {
     nextcloud = unstable.nextcloud;
@@ -41,11 +43,13 @@ let unstable = import <unstable> {
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
+    111 2049 33333 # nfs
     22 80 443 1443
     8080 # calibre
     445 139 # samba
   ];
   networking.firewall.allowedUDPPorts = [
+    111 2049 33333 # nfs
     137 138 # samba
   ];
   networking.firewall.allowPing = true;
