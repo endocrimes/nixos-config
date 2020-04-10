@@ -14,7 +14,6 @@ using [home-manager][home-manager].
 | ---- | ----------- |
 | mew  | Personal Thinkpad |
 | mrow | HPE Proliant Gen10 NAS |
-| ellipse | Mac Mini (2014) - Plex |
 | mir | Personal Workstation (Ryzen 3900x, Radeon 5700xt, 64GB RAM) |
 
 [dotfiles]: https://github.com/endocrimes/dotfiles
