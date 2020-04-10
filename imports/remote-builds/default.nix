@@ -10,24 +10,24 @@
       {
         hostName = "mir.local";
         system = "x86_64-linux";
-        maxJobs = 12;
-        speedFactor = 24;
+        maxJobs = 24;
+        speedFactor = 3;
         supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
         mandatoryFeatures = [ ];
       }
       {
         hostName = "salzburg.local";
         system = "x86_64-linux";
-        maxJobs = 2;
-        speedFactor = 8;
+        maxJobs = 8;
+        speedFactor = 3;
         supportedFeatures = [ "benchmark" "big-parallel" ];
         mandatoryFeatures = [ ];
       }
       {
         hostName = "berlin.infra.hormonal.party";
         system = "x86_64-linux";
-        maxJobs = 6;
-        speedFactor = 12;
+        maxJobs = 12;
+        speedFactor = 2;
         supportedFeatures = [ "nixos-tests" "benchmark" "big-parallel" ];
         mandatoryFeatures = [ ];
       }
