@@ -11,10 +11,8 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../imports/defaults.nix
-      ../imports/graphical.nix
-      ../imports/audio.nix
-      ../imports/yubikey.nix
+      ../modules/default
+      ../modules/workstation
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -33,9 +31,16 @@ in
     };
   };
 
+  fileSystems."/mnt/nas-home" =
+    { device = "192.168.178.105:spool/home/danielle";
+      fsType = "nfs";
+    };
+
   boot.plymouth.enable = true;
 
- services.xserver.videoDrivers = [ "amdgpu" ];
+  hardware.openrazer.enable = true;
+
+  services.xserver.videoDrivers = [ "amdgpu" ];
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot = {
@@ -55,18 +60,12 @@ in
 
     # https://github.com/NixOS/nixpkgs/issues/72034
     stable.nix
+
+    # Management for H100i Platinum cooler
+    opencorsairlink
   ];
 
   services.rpcbind.enable = true;
-
-  location.provider = "geoclue2";
-  services.redshift = {
-    enable = true;
-  };
-
-  virtualisation.docker.enable = true;
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "danielle" ];
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -74,14 +73,6 @@ in
   networking.useDHCP = false;
   networking.interfaces.enp10s0f1u3u4i5.useDHCP = true;
   networking.interfaces.enp8s0.useDHCP = true;
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -94,7 +85,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.danielle = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "plugdev" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
   };
 

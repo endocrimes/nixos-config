@@ -3,25 +3,17 @@
 {
   nix = {
     nixPath = [
-      "nixos-config=/home/system/${config.networking.hostName}/configuration.nix"
-
-      # Specify nixpkgs and unstable as the same repo for legacy raisins (aka
-      # everything is unstable now)
       "nixpkgs=/home/danielle/dev/src/github.com/nixos/nixpkgs"
+      "nixos-config=/home/system/${config.networking.hostName}/configuration.nix"
       "unstable=/home/danielle/dev/src/github.com/nixos/nixpkgs"
-
       "nixos-stable=/home/danielle/dev/src/github.com/nixos/nixpkgs-stable"
       "endopkgs=/home/danielle/dev/src/github.com/endocrimes/endopkgs"
-
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
-
     trustedUsers = [ "@wheel" ];
-
     useSandbox = true;
     extraOptions = ''
       auto-optimise-store = true
-      builders-use-substitutes = true
     '';
 
     binaryCaches = [
