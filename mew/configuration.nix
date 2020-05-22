@@ -16,10 +16,6 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.useOSProber = true;
-  boot.extraModulePackages = [
-    config.boot.kernelPackages.exfat-nofuse
-    config.boot.kernelPackages.wireguard
-  ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.plymouth.enable = true;
 
@@ -59,29 +55,6 @@ in {
 
   networking.hostName = "mew";
   networking.hostId = "41434142";
-
-  networking.wireguard.interfaces = {
-    wg0 = {
-      ips = [ "10.192.122.2/32" ];
-      privateKeyFile = "/etc/boot-secrets/wg0-key";
-      peers = [
-        {
-          publicKey = "rIIZ3OBz6LNsSgGI/oDJCf4Aqd5YIkjmrFOcigGoim4=";
-
-          allowedIPs = [
-            # Forward all traffic from the wireguard IP range
-            "10.192.122.0/24"
-          ];
-
-          # Set this to the server IP and port.
-          endpoint = "vpn.terrible.systems:51820";
-
-          # Send keepalives every 25 seconds. Important to keep NAT tables alive.
-          persistentKeepalive = 25;
-        }
-      ];
-    };
-  };
 
   networking.networkmanager = {
     enable = true;
@@ -134,8 +107,6 @@ in {
   };
 
   virtualisation.docker.enable = true;
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "danielle" ];
 
   users.groups.davfs2 = {};
   users.groups.dialout = {};
@@ -150,6 +121,8 @@ in {
     extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" "davfs2" "journalctl" ];
     shell = pkgs.zsh;
   };
+
+  # services.nomad.enable = true;
 
   system.stateVersion = "19.03";
 }
