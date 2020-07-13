@@ -43,4 +43,5 @@
   ];
   programs.mtr.enable = true;
   services.openssh.enable = true;
+  programs.mosh.enable = true;
 }
