@@ -40,6 +40,7 @@
     telnet
     nmap
     lm_sensors
+    rsync
   ];
   programs.mtr.enable = true;
   services.openssh.enable = true;
