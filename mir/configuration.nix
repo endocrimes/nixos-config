@@ -22,12 +22,15 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.initrd.availableKernelModules = [ "igb" ];
+
+  boot.initrd.network.enable = true;
   boot.initrd.network.ssh = {
     enable = true;
     port = 4242;
     hostKeys = [
       "/etc/secrets/initrd/ssh_host_rsa_key"
-      "/etc/secrets/initrd/ssh_host_ed25519_key"
+      "/etc/secrets/initrd/ssh_host_ed_25519_key"
     ];
     authorizedKeys = [
       "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAEYESQFFAIJlMTsZvnv9wSjtyHCNfXvlBgvMazJm2jxvH2SHhY3Cn4cDZk2bW/BdyZJHRmXUSDfYoRsGiTlXTluZwFCFg+5wair9y+gxHaTW+903bJDH1EXnkzzAXkf4OEIyudp9UqsCm8KPPJz9zuhGKw1rzq4e2EJwZ3hKAsWB3zsUA=="
