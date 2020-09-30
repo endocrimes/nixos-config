@@ -11,8 +11,10 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./corsair-devices-udev.nix
       ../modules/default
       ../modules/workstation
+      ../modules/camlink
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
