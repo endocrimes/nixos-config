@@ -17,6 +17,9 @@ in
       ../modules/camlink
     ];
 
+  # Enable dconf for pulseaudio settings
+  programs.dconf.enable = true;
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
   hardware.opengl.driSupport32Bit = true;
 
@@ -106,10 +109,14 @@ in
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
 
+  users.groups.vmwaremts = {
+    gid = 201;
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.danielle = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "plugdev" "networkmanager" ];
+    extraGroups = [ "wheel" "docker" "plugdev" "networkmanager" "vmwaremts" ];
     shell = pkgs.zsh;
   };
 
