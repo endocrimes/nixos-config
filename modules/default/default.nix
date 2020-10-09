@@ -41,6 +41,9 @@
     nmap
     lm_sensors
     rsync
+    iotop
+    pciutils
+    usbutils
   ];
   programs.mtr.enable = true;
   services.openssh.enable = true;
