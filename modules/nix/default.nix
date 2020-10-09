@@ -12,8 +12,11 @@
     ];
     trustedUsers = [ "@wheel" ];
     useSandbox = true;
+
+    # The copy-to-cache script can be found in scripts/copy-to-cache.sh
     extraOptions = ''
       auto-optimise-store = true
+      post-build-hook = /etc/nix/copy-to-cache.sh
     '';
 
     binaryCaches = [
@@ -25,11 +28,5 @@
     binaryCachePublicKeys = [
       "nixcache.infra.terrible.systems:BXjTXh35v6pyOf6kjkhd2T2Z1hXrCa4j/64HCwbZ5Mw="
     ];
-
-
-    # The copy-to-cache script can be found in scripts/copy-to-cache.sh
-    extraOptions = ''
-      post-build-hook = /etc/nix/copy-to-cache.sh
-    '';
   };
 }
