@@ -9,24 +9,30 @@
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "rtank";
+    { device = "rpool/root";
       fsType = "zfs";
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/nvme0n1p1";
-      fsType = "vfat";
+  fileSystems."/home" =
+    { device = "rpool/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/var/lib/docker" =
+    { device = "/dev/disk/by-uuid/381b5bbb-47f0-4676-8326-6a3aa5132159";
+      fsType = "ext4";
     };
 
   swapDevices =
-    [ { device = "/dev/mapper/vg-swap"; }
+    [ { device = "/dev/disk/by-uuid/045a9945-c19c-43df-9782-b80b5dd84834"; }
     ];
 
-  nix.maxJobs = lib.mkDefault 8;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  # High-DPI console
+  console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 }

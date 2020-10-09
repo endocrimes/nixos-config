@@ -1,15 +1,11 @@
 { config, pkgs, ... }:
 
-let stable = import <nixos-stable> { };
-in {
+{
   imports = [ # Include the results of the hardware scan.
-    <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
     ./hardware-configuration.nix
-    ../imports/defaults.nix
-    ../imports/graphical.nix
-    ../imports/audio.nix
-    ../imports/yubikey.nix
-    ../imports/remote-builds
+    ../modules/default
+    ../modules/nix/remote-builds
+    ../modules/workstation
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -20,9 +16,14 @@ in {
   boot.plymouth.enable = true;
 
   boot.initrd.luks.devices = {
-    env-pv = {
-      preLVM = true;
+    swap = {
       device = "/dev/nvme0n1p2";
+    };
+    zfs = {
+      device = "/dev/nvme0n1p3";
+    };
+    docker = {
+      device = "/dev/nvme0n1p4";
     };
   };
 
@@ -46,13 +47,6 @@ in {
   services.xserver.dpi = 210;
   fonts.fontconfig.dpi = 210;
 
-  # Fix sizes of GTK/GNOME ui elements
-  # environment.variables = {
-  #   GDK_SCALE = lib.mkDefault "1.5";
-  #   GDK_DPI_SCALE= lib.mkDefault "0.75";
-  # };
-
-
   networking.hostName = "mew";
   networking.hostId = "41434142";
 
@@ -67,9 +61,6 @@ in {
     feh
     davfs2
     brightnessctl
-
-    # https://github.com/NixOS/nixpkgs/issues/72034
-    stable.nix
   ];
 
   programs.gnupg.agent = {
@@ -77,7 +68,6 @@ in {
     enableSSHSupport = true;
   };
 
-  # Enable dconf for pulseaudio settings
   programs.dconf.enable = true;
 
   # Enable usbmuxd for iOS tethering
@@ -94,11 +84,31 @@ in {
 
   services.fwupd.enable = true;
 
-  services.cron = {
-    enable = true;
-    systemCronJobs = [
-      "*/10 * * * *    danielle   . /etc/profile; /home/danielle/.config/mutt/etc/mailsync.sh"
-    ];
+  services.printing.enable = true;
+
+  services.restic.backups = {
+    nasbackup = {
+      initialize = true;
+      repository = "rest:https://backups.terrible.systems/danielle-mew";
+      passwordFile = "/etc/nixos/secrets/restic/mewpw";
+      paths = [
+        "/home/danielle"
+      ];
+      extraBackupArgs = [
+        "--exclude=/home/danielle/.local"
+        "--exclude=/home/danielle/.steam"
+        "--exclude=/home/danielle/.cache"
+        "--exclude=/home/danielle/.zoom"
+        "--exclude=/home/danielle/.vscode"
+        "--exclude=/home/danielle/.mozilla"
+      ];
+      pruneOpts = [
+        "--keep-daily 4"
+        "--keep-weekly 1"
+        "--keep-monthly 1"
+        "--keep-yearly 99"
+      ];
+    };
   };
 
   location.provider = "geoclue2";
@@ -121,8 +131,6 @@ in {
     extraGroups = [ "wheel" "video" "docker" "avahi" "dialout" "davfs2" "journalctl" ];
     shell = pkgs.zsh;
   };
-
-  # services.nomad.enable = true;
 
   system.stateVersion = "19.03";
 }
