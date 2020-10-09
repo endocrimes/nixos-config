@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 let
@@ -95,9 +91,6 @@ in
 
   services.rpcbind.enable = true;
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
   networking.useDHCP = false;
   networking.networkmanager.enable = true;
 
@@ -106,25 +99,16 @@ in
   services.xserver.layout = "us";
   services.xserver.xkbOptions = "eurosign:e";
 
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
-
   users.groups.vmwaremts = {
     gid = 201;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.danielle = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "plugdev" "networkmanager" "vmwaremts" ];
     shell = pkgs.zsh;
   };
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
-
+  system.stateVersion = "19.09";
 }
 
