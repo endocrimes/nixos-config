@@ -1,29 +1,22 @@
 { config, pkgs, lib, ... }:
 
-let unstable = import <unstable> {
-    # Include the nixos config when importing nixos-unstable
-    # But remove packageOverrides to avoid infinite recursion
-    config = removeAttrs config.nixpkgs.config [ "packageOverrides" ];
-}; in
+let unstable = import <unstable> {};
+in
 {
-  disabledModules = [ "services/web-apps/nextcloud.nix" ];
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../imports/defaults.nix
-     ../imports/server.nix
-     ../imports/remote-builds
-
-      # Override the nextcloud module
-      <unstable/nixos/modules/services/web-apps/nextcloud.nix>
+      ../modules/default
+      ../modules/monitoring
+      ../imports/remote-builds
     ];
 
   services.nfs.server.enable = true;
+  # need to add echo N > /sys/module/nfsd/parameters/nfs4_disable_idmapping
 
-  # Override select packages to use the unstable channel
-  nixpkgs.config.packageOverrides = pkgs: {
-    nextcloud = unstable.nextcloud;
-  };
+  environment.systemPackages = with pkgs; [
+    unzip
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -83,6 +76,7 @@ let unstable = import <unstable> {
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy6nsIHNmq0zzkXbjutADn2cjOoLjz70+yQPnDku9Da/BdmjQEoArsojI/l5WuP0D2+xUXEOLQonGF1LKdBiBrCn775PVF/wd4MlW1a7uyXiFlYu4a2H8dgaQ79E85/Tpzc9AwzkVb+vq1oii49yQFarc7RHrqXikQ9yDTqWZQ5BYZUSXZVZ+ZCct9Y/3xxQyMD7i1eTaf7t2HfIUusAVzIXfpUfFQ2XxUyoJtRrG2hgTIdUikN0+JDD8Th1d+rPIw+uYNwbrw9qEpMY8MXT4Od8i7/j8Wwyo4iOF04n2nNmV+p1ToQ6iiduZZZ3/npRdhzbgXJK5TNq98R66Igiit" # mew
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3bsRW8tLBO3PmpXPrpE635Zu7qOWgWvDRrTm2QQh8Z dani@mir" # mir
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC80KBriR+kXiawNPoBqk8eC6VMXFq7B5QZebqrwoJCTQX7pYrr9wU7WqjjXlYdfPyeZOCbJK/+baBu6OheISt1qfa81C4aKMevU9P4IgtwUN6z44s+xBYhrF/xWrs0CW0SaF+/gM/9nc4Anj9wk7JbFYKqAVbf7KtjtkeS1dUcHo4iIl+Gxx0d3jNoDtkCQBAKpzx4Z4FsA7bD5af3usmfa8YP8eH8VmbNqZY9DXlAr8FZzC7zzRRE7nsshelLTdnve9+wgtE65L6G1k43PsfJXw/kxe2XAb38N2U/ZWw6ZuYvJmF+BKRvPxQhsbie2AT5GH5+AFhQUVPfrZnYwwMWd/F0igc+Iee2nY+knu3OUgeNW50H4yi+/hAkDuyEdyLALg1ttbpWWYlgIhez5k5hY4oi+6H+mRlUV0J431Xk+UwVovzuC8cjjdu0zAWqgTN36DDxiill51Lv5swFi9wUfKoMxMFPA2dZZNmX37h20ftnN2aYSF6B/6Z1ugteB0adsa1lWNdf4/aomWEmvy8GyOQmOIC5KeVsPs5CEKqwLbTiRUYNJDIF7pth1Jq1N6hMCzCEn2qYPMrzXjiHgLAU/ewyT3+wu0FtZGOwEDZj/d1aba26LyxTOJ8H1xb5HHq29StFEfs0OPaXLhVvUSQ9H2jTAj2tTaiVhQ7I02KJGQ== danielle@ipad" # Blink on iPad
     ];
   };
 
@@ -96,6 +90,11 @@ let unstable = import <unstable> {
   };
 
   nixpkgs.config.allowUnfree = true;
+
+  security.acme = {
+    email = "dani@builds.terrible.systems";
+    acceptTerms = true;
+  };
 
   services.calibre-server = {
     enable = false;
@@ -133,6 +132,13 @@ let unstable = import <unstable> {
     secretKeyFile = "/var/bincache.d/cache-priv-key.pem";
   };
 
+  services.restic.server = {
+    enable = true;
+    listenAddress = ":9004";
+    dataDir = "/spool/backups/restic";
+    prometheus = true;
+  };
+
   services.nginx.virtualHosts."minio.terrible.systems" = {
     enableACME = true;
     forceSSL = true;
@@ -150,7 +156,18 @@ let unstable = import <unstable> {
     enableACME = true;
     forceSSL = true;
     locations."/" = {
-      proxyPass = "http://192.168.178.72:32400";
+      proxyPass = "http://192.168.178.123:32400";
+    };
+  };
+
+  services.nginx.virtualHosts."backups.terrible.systems" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:9004";
+      extraConfig = ''
+        client_max_body_size 3G;
+      '';
     };
   };
 
@@ -163,7 +180,7 @@ let unstable = import <unstable> {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     '';
-  }; 
+  };
 
   services.postgresql = {
     enable = true;
@@ -189,7 +206,7 @@ let unstable = import <unstable> {
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
-        "create mask" = "0644";
+        "create mask" = "0660";
         "directory mask" = "0755";
       };
       media = {
@@ -197,8 +214,16 @@ let unstable = import <unstable> {
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
-        "create mask" = "0644";
+        "create mask" = "0664";
         "directory mask" = "0755";
+      };
+      danielle = {
+        path = "/spool/home/danielle";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0600";
+        "directory mask" = "0700";
       };
     };
   };
@@ -213,5 +238,5 @@ let unstable = import <unstable> {
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 }
