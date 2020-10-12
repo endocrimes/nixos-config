@@ -87,6 +87,8 @@ in
 
     # Management for H100i Platinum cooler
     opencorsairlink
+
+    efibootmgr
   ];
 
   services.rpcbind.enable = true;
