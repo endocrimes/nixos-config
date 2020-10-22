@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [ # Include the results of the hardware scan.
@@ -6,13 +6,14 @@
     ../modules/default
     ../modules/nix/remote-builds
     ../modules/workstation
+    ../modules/vpn
   ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.useOSProber = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_5_8;
   boot.plymouth.enable = true;
 
   boot.initrd.luks.devices = {
@@ -89,7 +90,9 @@
   services.restic.backups = {
     nasbackup = {
       initialize = true;
-      repository = "rest:https://backups.terrible.systems/danielle-mew";
+      # This is really sad because it means the pw ends up in my nix store, but
+      # I don't really have a better solution right now.
+      repository = "rest:https://${lib.removeSuffix "\n" (builtins.readFile /etc/nixos/secrets/restic/mewpw)}@backups.terrible.systems/danielle-mew";
       passwordFile = "/etc/nixos/secrets/restic/mewpw";
       paths = [
         "/home/danielle"
