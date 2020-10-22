@@ -8,7 +8,8 @@ in
       ./hardware-configuration.nix
       ../modules/default
       ../modules/monitoring
-      ../imports/remote-builds
+      ../modules/nix/remote-builds
+      ../modules/vpn
     ];
 
   services.nfs.server.enable = true;
