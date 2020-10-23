@@ -4,10 +4,10 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../modules/default
-      ../modules/monitoring
-      ../modules/nix/remote-builds
-      ../modules/vpn
+      ../../modules/default
+      ../../modules/monitoring
+      ../../modules/nix/remote-builds
+      ../../modules/vpn
     ];
 
   services.nfs.server.enable = true;
