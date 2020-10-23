@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let unstable = import <unstable> {};
-in
 {
   imports =
     [ # Include the results of the hardware scan.

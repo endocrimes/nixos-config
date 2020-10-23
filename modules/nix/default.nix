@@ -4,9 +4,8 @@
   nix = {
     nixPath = [
       "nixpkgs=/home/danielle/dev/src/github.com/nixos/nixpkgs"
-      "nixos-config=/home/system/${config.networking.hostName}/configuration.nix"
+      "nixos-config=/home/system/hosts/${config.networking.hostName}/configuration.nix"
       "unstable=/home/danielle/dev/src/github.com/nixos/nixpkgs"
-      "nixos-stable=/home/danielle/dev/src/github.com/nixos/nixpkgs-stable"
       "endopkgs=/home/danielle/dev/src/github.com/endocrimes/endopkgs"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];

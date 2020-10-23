@@ -1,17 +1,14 @@
 { config, pkgs, ... }:
 
-let
-  stable = import <nixos-stable> { };
-in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./corsair-devices-udev.nix
-      ../modules/default
-      ../modules/workstation
-      ../modules/camlink
-      ../modules/vpn
+      ../../modules/default
+      ../../modules/workstation
+      ../../modules/camlink
+      ../../modules/vpn
     ];
 
   # Enable dconf for pulseaudio settings
@@ -83,8 +80,7 @@ in
 
     vscode
 
-    # https://github.com/NixOS/nixpkgs/issues/72034
-    stable.nix
+    nix
 
     # Management for H100i Platinum cooler
     opencorsairlink
