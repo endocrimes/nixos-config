@@ -11,6 +11,7 @@ in
       ../modules/default
       ../modules/workstation
       ../modules/camlink
+      ../modules/vpn
     ];
 
   # Enable dconf for pulseaudio settings
@@ -100,6 +101,15 @@ in
   services.xserver.enable = true;
   services.xserver.layout = "us";
   services.xserver.xkbOptions = "eurosign:e";
+
+  services.xserver.xautolock = {
+    enable = true;
+    enableNotifier = true;
+    time = 5;
+    nowlocker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
+    locker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
+    notifier = "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\"";
+  };
 
   users.groups.vmwaremts = {
     gid = 201;
