@@ -3,10 +3,10 @@
 {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../modules/default
-    ../modules/nix/remote-builds
-    ../modules/workstation
-    ../modules/vpn
+    ../../modules/default
+    ../../modules/nix/remote-builds
+    ../../modules/workstation
+    ../../modules/vpn
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -41,6 +41,7 @@
 
   # Dammit Valve get your shit together
   hardware.opengl.driSupport32Bit = true;
+  hardware.pulseaudio.support32Bit = true;
 
   powerManagement.enable = true;
 
