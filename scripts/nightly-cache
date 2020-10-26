@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+
+nixroot="$(dirname "$0")/../"
+
+if [ "$#" -eq 0 ]; then
+    sys="$(hostname -f)"
+    if ! [ -f "$nixroot/hosts/$sys/configuration.nix" ]; then
+        echo -e "\e[31;1merror:\e[0m must specify a system definition" >&2
+        echo "Available system definitions are:" >&2
+        find "$nixroot/hosts" -mindepth 1 -maxdepth 1 -type d | awk -F / '{print "- " $NF}' | sed 's/\.nix$//' >&2
+        exit 1
+    fi
+else
+    sys="$1"
+    shift
+fi
+
+export NIX_PATH=nixos-config=$nixroot/hosts/$sys/configuration.nix:nixpkgs=$HOME/nixpkgs:endopkgs=$HOME/endopkgs
+linkdir="$(mktemp -d)"
+link="$linkdir/result"
+nix build -f '<nixpkgs/nixos>' --out-link "$link" "$@" system
+path="$(readlink "$link")"
+echo "$path"
+
