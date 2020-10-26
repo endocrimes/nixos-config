@@ -3,10 +3,9 @@
 {
   nix = {
     nixPath = [
-      "nixpkgs=/home/danielle/dev/src/github.com/nixos/nixpkgs"
+      "nixpkgs=/home/system/submodules/nixpkgs"
       "nixos-config=/home/system/hosts/${config.networking.hostName}/configuration.nix"
-      "unstable=/home/danielle/dev/src/github.com/nixos/nixpkgs"
-      "endopkgs=/home/danielle/dev/src/github.com/endocrimes/endopkgs"
+      "endopkgs=/home/system/submodules/endopkgs"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
     trustedUsers = [ "@wheel" ];

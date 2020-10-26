@@ -1,0 +1,6 @@
+[submodule "submodules/nixpkgs"]
+	path = submodules/nixpkgs
+	url = https://github.com/nixos/nixpkgs.git
+[submodule "submodules/endopkgs"]
+	path = submodules/endopkgs
+	url = https://github.com/endocrimes/endopkgs

@@ -18,7 +18,7 @@ else
     shift
 fi
 
-export NIX_PATH=nixos-config=$nixroot/hosts/$sys/configuration.nix:nixpkgs=$HOME/nixpkgs:endopkgs=$HOME/endopkgs
+export NIX_PATH=nixos-config=$nixroot/hosts/$sys/configuration.nix:nixpkgs=$nixroot/submodules/nixpkgs:endopkgs=$nixroot/submodules/endopkgs
 linkdir="$(mktemp -d)"
 link="$linkdir/result"
 nix build -f '<nixpkgs/nixos>' --out-link "$link" "$@" system
