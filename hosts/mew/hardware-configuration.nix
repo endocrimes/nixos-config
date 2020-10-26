@@ -28,15 +28,16 @@
       fsType = "ext4";
     };
 
-    fileSystems."/boot" =
-      { device = "/dev/disk/by-uuid/D667-9581";
-        fsType = "vfat";
-      };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/D667-9581";
+      fsType = "vfat";
+    };
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/045a9945-c19c-43df-9782-b80b5dd84834"; }
     ];
 
+  # powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # High-DPI console
   console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
