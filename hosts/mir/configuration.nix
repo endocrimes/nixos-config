@@ -51,6 +51,9 @@
     swap = {
       device = "/dev/nvme0n1p2";
     };
+    docker = {
+      device = "/dev/nvme0n1p5";
+    };
   };
 
   fileSystems."/mnt/nas-home" =
