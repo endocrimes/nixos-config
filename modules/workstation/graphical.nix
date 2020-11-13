@@ -3,6 +3,8 @@
 {
   fonts.fonts = with pkgs; [ twemoji-color-font nerdfonts ];
 
+  boot.plymouth.enable = true;
+
   services.xserver = {
     enable = true;
     layout = "us";
