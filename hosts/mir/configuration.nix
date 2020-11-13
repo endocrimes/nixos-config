@@ -85,9 +85,6 @@
 
     nix
 
-    # Management for H100i Platinum cooler
-    opencorsairlink
-
     efibootmgr
   ];
 
@@ -97,17 +94,19 @@
   networking.networkmanager.enable = true;
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.layout = "us";
-  services.xserver.xkbOptions = "eurosign:e";
-
-  services.xserver.xautolock = {
+  services.xserver = {
     enable = true;
-    enableNotifier = true;
-    time = 5;
-    nowlocker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
-    locker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
-    notifier = "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\"";
+    layout = "us";
+    xkbOptions = "eurosign:e";
+
+    xautolock = {
+      enable = true;
+      enableNotifier = true;
+      time = 5;
+      nowlocker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
+      locker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
+      notifier = "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\"";
+    };
   };
 
   users.groups.vmwaremts = {
