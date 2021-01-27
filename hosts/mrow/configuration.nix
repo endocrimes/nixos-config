@@ -100,23 +100,6 @@
     libraryDir = "/spool/storage/calibre-library";
   };
 
-  services.nextcloud = {
-    enable = true;
-    hostName = "nextcloud.terrible.systems";
-    home = "/spool/nextcloud";
-    https = true;
-
-    nginx.enable = true;
-    config = {
-      dbtype = "pgsql";
-      dbuser = "nextcloud";
-      dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
-      dbname = "nextcloud";
-      adminpassFile = "/etc/nixos/passwd-nextcloud";
-      adminuser = "root";
-    };
-  };
-
   services.minio = {
     enable = true;
     listenAddress = ":9002";
@@ -136,6 +119,10 @@
     listenAddress = ":9004";
     dataDir = "/spool/backups/restic";
     prometheus = true;
+  };
+
+  services.nginx = {
+    enable = true;
   };
 
   services.nginx.virtualHosts."minio.terrible.systems" = {
@@ -159,6 +146,34 @@
     };
   };
 
+  services.nginx.virtualHosts."homeassistant.hormonal.party" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://192.168.178.123:8123";
+      extraConfig = ''
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+      '';
+    };
+  };
+
+  services.nginx.virtualHosts."goproxy.hormonal.party" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://192.168.178.123:30001";
+      extraConfig = ''
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      '';
+    };
+  };
+
   services.nginx.virtualHosts."backups.terrible.systems" = {
     enableACME = true;
     forceSSL = true;
@@ -174,7 +189,7 @@
     enableACME = true;
     forceSSL = true;
     locations."/".extraConfig = ''
-      proxy_pass http://localhost:${toString config.services.nix-serve.port};
+      proxy_pass http://127.0.0.1:${toString config.services.nix-serve.port};
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -192,7 +207,13 @@
   };
 
   services.samba = {
-    package = pkgs.sambaFull;
+    package = pkgs.samba4.override {
+      enableLDAP = true;
+      enablePrinting = true;
+      enableMDNS = true;
+      enableDomainController = true;
+      enableRegedit = true;
+    };
     enable = true;
     securityType = "user";
     extraConfig = ''
