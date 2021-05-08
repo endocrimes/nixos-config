@@ -4,10 +4,11 @@
   sound.enable = true;
   hardware.bluetooth = {
     enable = true;
-    extraConfig = ''
-            [General]
-            Enable=Source,Sink,Media,Socket
-    '';
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+      };
+    };
   };
   hardware.pulseaudio = {
     enable = true;

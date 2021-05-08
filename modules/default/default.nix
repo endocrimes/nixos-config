@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
-{
+
+let endopkgs = import <endopkgs> { };
+in {
   imports = [
     ../nix
   ];
@@ -44,8 +46,20 @@
     iotop
     pciutils
     usbutils
+    endopkgs.mosh
   ];
   programs.mtr.enable = true;
   services.openssh.enable = true;
-  programs.mosh.enable = true;
+
+  # Mosh
+  networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
+  security.wrappers = {
+    utempter = {
+      source = "${pkgs.libutempter}/lib/utempter/utempter";
+      owner = "nobody";
+      group = "utmp";
+      setuid = false;
+      setgid = true;
+    };
+  };
 }

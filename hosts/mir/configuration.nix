@@ -64,13 +64,20 @@
   };
 
   fileSystems."/mnt/nas-home" =
-    { device = "192.168.178.105:spool/home/danielle";
+    { device = "192.168.178.30:storage/home/danielle";
       fsType = "nfs";
     };
 
-  hardware.openrazer.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" "vmware" ];
 
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  virtualisation.vmware.guest.enable = true;
+
+  virtualisation.docker = {
+    storageDriver = "overlay2";
+    enableNvidia = true;
+  };
+
+  hardware.openrazer.enable = true;
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot = {
@@ -91,6 +98,7 @@
     nix
 
     efibootmgr
+    open-vm-tools
   ];
 
   services.rpcbind.enable = true;
