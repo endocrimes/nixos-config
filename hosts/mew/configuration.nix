@@ -4,7 +4,7 @@
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../modules/default
-    ../../modules/nix/remote-builds
+    ../../modules/nix/use-remote-builds
     ../../modules/workstation
     ../../modules/vpn
   ];
