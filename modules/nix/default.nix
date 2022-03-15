@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   nix = {
@@ -8,23 +8,29 @@
       "endopkgs=/home/system/submodules/endopkgs"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
-    trustedUsers = [ "@wheel" ];
-    useSandbox = true;
 
-    # The copy-to-cache script can be found in scripts/copy-to-cache.sh
-    extraOptions = ''
-      auto-optimise-store = true
-      post-build-hook = /etc/nix/copy-to-cache.sh
-    '';
+    settings = {
+      sandbox = true;
 
-    binaryCaches = [
-      "https://nixcache.infra.terrible.systems/"
-    ];
-    trustedBinaryCaches = [
-      "https://nixcache.infra.terrible.systems/"
-    ];
-    binaryCachePublicKeys = [
-      "nixcache.infra.terrible.systems:BXjTXh35v6pyOf6kjkhd2T2Z1hXrCa4j/64HCwbZ5Mw="
-    ];
+      trusted-users = [ "@wheel" ];
+
+      # The copy-to-cache script can be found in scripts/copy-to-cache.sh
+      auto-optimise-store = true;
+      post-build-hook = "/etc/nix/copy-to-cache.sh";
+
+      substituters = [
+        "https://nixcache.infra.terrible.systems/"
+      ];
+      trusted-binary-caches = [
+        "https://nixcache.infra.terrible.systems/"
+      ];
+      trusted-public-keys = [
+        "nixcache.infra.terrible.systems:BXjTXh35v6pyOf6kjkhd2T2Z1hXrCa4j/64HCwbZ5Mw="
+      ];
+    };
   };
+
+  system.extraSystemBuilderCmds = ''
+    ln -s ${lib.cleanSource ../..} $out/systems
+  '';
 }
