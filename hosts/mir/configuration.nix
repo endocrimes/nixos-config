@@ -15,8 +15,11 @@
   networking.hostName = "mir";
   networking.hostId = "6fb90b34";
 
+  # Unfortunately Kubernetes E2E tests fail with unified cgroups
+  systemd.enableUnifiedCgroupHierarchy = false;
+
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
     loader = {
       systemd-boot = {
         enable = true;
@@ -64,17 +67,25 @@
   };
 
   fileSystems."/mnt/nas-home" =
-    { device = "192.168.178.30:storage/home/danielle";
+    { device = "192.168.2.56:storage/home/danielle";
       fsType = "nfs";
     };
 
-  services.xserver.videoDrivers = [ "nvidia" "vmware" ];
+  services.xserver.videoDrivers = [ "vmware" ];
 
   virtualisation.vmware.guest.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "wheel" ];
 
   virtualisation.docker = {
     storageDriver = "overlay2";
     enableNvidia = true;
+  };
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      docker = pkgs.docker.override { buildxSupport = true; };
+    };
   };
 
   hardware.openrazer.enable = true;
@@ -109,7 +120,7 @@
   services.xserver.xautolock = {
     enable = true;
     enableNotifier = true;
-    time = 5;
+    time = 30;
     nowlocker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
     locker = "${pkgs.i3lock}/bin/i3lock -fi /etc/background-image.png";
     notifier = "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\"";
