@@ -44,7 +44,21 @@
               docker = pkgs.docker.override { buildxSupport = true; };
             };
           };
-      })];
+        })
+
+        home-manager.nixosModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.danielle = import ./users/danielle/home-manager.nix;
+        }
+
+        {
+          config._module.args = {
+            currentSystemName = "mir";
+            isGUISystem = true;
+          };
+        }
+      ];
     };
   };
 }
