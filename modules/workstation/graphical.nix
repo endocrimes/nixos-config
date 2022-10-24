@@ -37,12 +37,9 @@
       naturalScrolling = true;
     };
 
-    # Fix screen tearing
-    videoDrivers = [ "intel" ];
     deviceSection = ''
       Option "DRI" "2"
       Option "TearFree" "true"
     '';
-    useGlamor = true;
   };
 }

@@ -18,16 +18,15 @@ else
     shift
 fi
 
-export NIX_PATH=nixos-config=$nixroot/hosts/$sys/configuration.nix:nixpkgs=$nixroot/submodules/nixpkgs:endopkgs=$nixroot/submodules/endopkgs
 linkdir="$(mktemp -d)"
 link="$linkdir/result"
 
 options=""
 if [[ -z "$DISABLE_LOCAL_CACHE" ]]; then
-  options="$options --option substituters \"https://cache.nixos.org\""
+  options="$options --option substituters https://cache.nixos.org"
 fi
 
-nix build --extra-experimental-features nix-command $options -f '<nixpkgs/nixos>' --out-link "$link" "$@" system
+nix build --extra-experimental-features "nix-command flakes" $options --out-link "$link" .#nixosConfigurations.$sys.config.system.build.toplevel
 path="$(readlink "$link")"
 nix-env -p /nix/var/nix/profiles/system --set "$path"
 rm -rf "$linkdir"

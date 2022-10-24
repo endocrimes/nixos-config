@@ -12,9 +12,9 @@ using [home-manager][home-manager].
 
 | name | description |
 | ---- | ----------- |
-| mew  | Personal Thinkpad |
-| mrow | HPE Proliant Gen10 NAS |
-| mir | Personal Workstation (Ryzen 3900x, Radeon 5700xt, 64GB RAM) |
+| mir | Personal Workstation (Ryzen 3950x, RTX 3080, 64GB RAM) |
+
+Other systems live in [HormonalParty/systems](https://github.com/hormonalparty/systems).
 
 [dotfiles]: https://github.com/endocrimes/dotfiles
 [home-manager]: https://github.com/rycee/home-manager

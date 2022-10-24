@@ -1,27 +1,21 @@
 { config, lib, pkgs, ... }:
 
+
 {
   nix = {
-    nixPath = [
-      "nixpkgs=/home/system/submodules/nixpkgs"
-      "nixos-config=/home/system/hosts/${config.networking.hostName}/configuration.nix"
-      "endopkgs=/home/system/submodules/endopkgs"
-      "/nix/var/nix/profiles/per-user/root/channels"
-    ];
-
     settings = {
       sandbox = true;
-
       trusted-users = [ "@wheel" ];
-
-      # The copy-to-cache script can be found in scripts/copy-to-cache.sh
       auto-optimise-store = true;
-      post-build-hook = "/etc/nix/copy-to-cache.sh";
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
 
       substituters = [
         "https://nixcache.infra.terrible.systems/"
       ];
-      trusted-binary-caches = [
+      trusted-substituters = [
         "https://nixcache.infra.terrible.systems/"
       ];
       trusted-public-keys = [

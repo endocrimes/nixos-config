@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
-let endopkgs = import <endopkgs> { };
-in {
+{
   imports = [
     ../nix
   ];
@@ -46,7 +45,6 @@ in {
     iotop
     pciutils
     usbutils
-    endopkgs.mosh
   ];
   programs.mtr.enable = true;
   services.openssh.enable = true;
