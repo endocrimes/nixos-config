@@ -2,6 +2,9 @@ name: "Build System Configurations"
 on:
   pull_request:
   push:
+    branches:
+      - main
+      - master
 jobs:
   build-mir:
     runs-on: ubuntu-latest
