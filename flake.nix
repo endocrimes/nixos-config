@@ -15,6 +15,10 @@
     overlays = [
       (final: prev: {
         docker = prev.docker.override { buildxSupport = true; };
+        vim_configurable = prev.vim_configurable.override {
+          guiSupport = (if prev.stdenv.isDarwin then "none" else "gtk3");
+          darwinSupport = prev.stdenv.isDarwin;
+        };
       })
     ];
 
