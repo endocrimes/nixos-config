@@ -11,7 +11,6 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: let
-    # Overlays is the list of overlays we want to apply from flake inputs.
     overlays = [
       (final: prev: {
         docker = prev.docker.override { buildxSupport = true; };
@@ -65,11 +64,7 @@
 
           boot.initrd.network.ssh.authorizedKeys = sshPublicKeys;
 
-          nixpkgs.config = {
-            packageOverrides = pkgs: {
-              docker = pkgs.docker.override { buildxSupport = true; };
-            };
-          };
+          nixpkgs.overlays = overlays;
         })
 
         home-manager.nixosModules.home-manager {
