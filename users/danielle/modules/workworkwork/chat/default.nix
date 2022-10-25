@@ -1,6 +1,6 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, isGUISystem, ... }:
 
 {
-  home.packages = with pkgs; [ slack zoom-us ];
+  home.packages = with pkgs; lib.optionals (isGUISystem) [ slack zoom-us ];
 }
 

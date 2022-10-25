@@ -50,11 +50,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.danielle = import ./users/danielle/home-manager.nix;
-        }
-
-        {
-          config._module.args = {
-            currentSystemName = "mir";
+          home-manager.extraSpecialArgs = {
             isGUISystem = true;
           };
         }

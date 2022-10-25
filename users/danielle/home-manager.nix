@@ -1,20 +1,22 @@
-{ stdenv, config, pkgs, ... }:
+{ stdenv, config, pkgs, lib, isGUISystem, ... }:
 
-{
+let
+  whenGUI = attrs: if isGUISystem then attrs else [];
+in {
   imports = [
     ./modules/base
     ./modules/develop
     ./modules/email
-  ] ++ if config.args.isGUISystem then
-  [
     ./modules/graphical/i3
     ./modules/workstation
     ./modules/workworkwork
-  ] else [];
+  ];
 
   programs.firefox = {
-    enable = config.args.isGUISystem;
+    enable = isGUISystem;
   };
+
+  home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
     python27
@@ -22,12 +24,12 @@
     pinentry
     syncthing
     ripgrep
-  ] // if config.args.isGUISystem then
+  ] ++ (whenGUI
     [
       keybase-gui
       gimp
       xclip
-    ] else [];
+    ]);
 
   systemd.user.startServices = true;
 

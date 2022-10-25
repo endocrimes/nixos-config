@@ -1,8 +1,8 @@
 # window management config (i3/polybar etc)
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, isGUISystem, ... }:
 
 {
-  home.packages = with pkgs; [
+  home.packages = with pkgs; lib.optionals (isGUISystem) [
     pywal
     polybar
     rofi
@@ -12,7 +12,7 @@
   ];
 
   services.polybar = {
-    enable = true;
+    enable = isGUISystem;
     config = ./polybar.conf;
     script = lib.mkDefault ''
       # HACK: Cut is unavailable in the path so we do some sad indirection bc i'm
@@ -27,7 +27,7 @@
   };
 
   services.dunst = {
-    enable = true;
+    enable = isGUISystem;
     settings = {
       global = {
         # Default to monitor 0, but follow mouse focus if possible.
@@ -86,7 +86,7 @@
   };
 
   services.picom = {
-    enable = true;
+    enable = isGUISystem;
     backend = "glx";
     vSync = true;
     settings = {

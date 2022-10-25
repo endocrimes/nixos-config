@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, isGUISystem, ... }:
 
 {
-  home.packages = with pkgs; [
+  home.packages = with pkgs; lib.optionals (isGUISystem) [
     # Chat
     signal-desktop
     quasselClient
@@ -10,5 +10,5 @@
     skypeforlinux
   ];
 
-  services.keybase.enable = true;
+  services.keybase.enable = isGUISystem;
 }

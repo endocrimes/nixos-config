@@ -1,12 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, isGUISystem, ... }:
 
 {
-  imports =
-    [ ./fonts ./chat ./terminal ./entertainment ./yubikey.nix ];
+  imports = [ ./fonts ./chat ./entertainment ./yubikey.nix ];
 
-  home.packages = with pkgs; [
+  home.packages = with pkgs; lib.optionals (isGUISystem) [
     # Configure Planck
     wally-cli
+
+    kitty
 
     # xclip. why.
     xclip
