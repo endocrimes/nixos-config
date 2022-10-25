@@ -23,6 +23,28 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINx6NhFAcuwyR3ralO+ikopApVQieJtXHieLkQlQN/dn"
     ];
   in {
+    homeConfigurations = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-linux"] (system: {
+      danielle_nogui = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          config.allowUnfree = true;
+          config.xdg.configHome = "/home/danielle/.config";
+          inherit overlays system;
+        };
+
+        modules = [
+          ./users/danielle/home-manager.nix
+          {
+            home.username = "danielle";
+            home.homeDirectory = "/users/danielle";
+          }
+        ];
+
+        extraSpecialArgs = {
+          isGUISystem = false;
+        };
+      };
+    });
+
     nixosConfigurations.mir = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules =

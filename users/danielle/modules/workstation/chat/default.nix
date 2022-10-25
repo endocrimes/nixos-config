@@ -11,4 +11,5 @@
   ];
 
   services.keybase.enable = isGUISystem;
+  services.kbfs.enable = isGUISystem;
 }
