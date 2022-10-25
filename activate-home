@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+
+nixev() {
+  nix-instantiate --eval --strict -E "$1"
+}
+
+desc_system() {
+  nixev '(import <nixpkgs> {}).stdenv.hostPlatform.system'
+}
+
+if [ "$#" -eq 0 ]; then
+  sys="$(desc_system | jq -r)"
+else
+  sys="$1"
+  shift
+fi
+
+linkdir="$(mktemp -d)"
+link="$linkdir/result"
+
+options=""
+if [[ -z "$DISABLE_LOCAL_CACHE" ]]; then
+  options="$options --option substituters https://cache.nixos.org"
+fi
+
+nix build --extra-experimental-features "nix-command flakes" $options --out-link "$link" .#homeConfigurations.$sys.danielle_nogui.activationPackage
+path="$(readlink "$link")"
+rm -rf "$linkdir"
+
+exec "$path/activate"
