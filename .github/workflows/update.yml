@@ -19,3 +19,4 @@ jobs:
         uses: DeterminateSystems/update-flake-lock@v14
         with:
           pr-title: "Update flake.lock"
+          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
