@@ -1,13 +1,20 @@
-{ config, pkgs, ... }:
+{ stdenv, config, pkgs, ... }:
 
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  home.packages = with pkgs; [ unzip lsof zsh lm_sensors htop ];
+  home.packages = with pkgs; [
+    unzip
+    lsof
+    zsh
+    htop
+  ] ++ lib.optionals (pkgs.stdenv.isLinux) [
+    lm_sensors
+  ];
 
   services.gpg-agent = {
-    enable = true;
+    enable = pkgs.stdenv.isLinux;
 
     # Cache Keys for 30 mins
     defaultCacheTtl = 1800; # Cache GPG Keys for 30 mins

@@ -23,7 +23,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINx6NhFAcuwyR3ralO+ikopApVQieJtXHieLkQlQN/dn"
     ];
   in {
-    homeConfigurations = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-linux"] (system: {
+    homeConfigurations = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-linux" "aarch64-darwin"] (system: {
       danielle_nogui = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           config.allowUnfree = true;

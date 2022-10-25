@@ -33,6 +33,6 @@ in {
 
   systemd.user.startServices = true;
 
-  services.syncthing = { enable = true; };
+  services.syncthing = { enable = pkgs.stdenv.isLinux; };
 }
 
