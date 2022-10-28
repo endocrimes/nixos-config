@@ -79,8 +79,6 @@
     };
   };
 
-  hardware.openrazer.enable = true;
-
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot = {
     enable = true;
