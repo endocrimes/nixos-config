@@ -1,4 +1,4 @@
-{ stdenv, config, pkgs, ... }:
+{ stdenv, config, pkgs, isGUISystem, ... }:
 
 {
   # Let Home Manager install and manage itself.
@@ -9,6 +9,7 @@
     lsof
     zsh
     htop
+    gnupg
   ] ++ lib.optionals (pkgs.stdenv.isLinux) [
     lm_sensors
   ];
@@ -24,6 +25,12 @@
     maxCacheTtl = 7200;
     maxCacheTtlSsh = 7200;
 
-    enableSshSupport = true;
+    pinentryFlavor = if isGUISystem then "gtk2" else "tty";
+
+    extraConfig = ''
+    allow-loopback-pinentry
+    '';
+
+    grabKeyboardAndMouse = isGUISystem;
   };
 }

@@ -18,6 +18,9 @@
           guiSupport = (if prev.stdenv.isDarwin then "none" else "gtk3");
           darwinSupport = prev.stdenv.isDarwin;
         };
+        gnupg = prev.gnupg.override {
+          guiSupport = false;
+        };
       })
     ];
 
@@ -38,7 +41,7 @@
           ./users/danielle/home-manager.nix
           {
             home.username = "danielle";
-            home.homeDirectory = "/users/danielle";
+            home.homeDirectory = if system == "aarch64-darwin" then "/users/danielle" else "/home/danielle";
           }
         ];
 
