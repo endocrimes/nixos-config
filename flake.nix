@@ -21,6 +21,10 @@
         gnupg = prev.gnupg.override {
           guiSupport = false;
         };
+        polybar = prev.polybar.override {
+          i3Support = true;
+          pulseSupport = true;
+        };
       })
     ];
 
