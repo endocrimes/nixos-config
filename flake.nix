@@ -63,6 +63,10 @@
             ./hosts/mir/configuration.nix
           ];
 
+          nixpkgs.config.permittedInsecurePackages = [
+            "python-2.7.18.6"
+          ];
+
           nix.registry.nixpkgs.flake = nixpkgs;
           nix.nixPath = ["nixpkgs=${nixpkgs}"];
 
