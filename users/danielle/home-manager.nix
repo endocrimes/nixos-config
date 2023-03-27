@@ -19,7 +19,6 @@ in {
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
-    python27
     gnupg
     pinentry
     syncthing
