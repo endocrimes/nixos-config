@@ -17,6 +17,17 @@ jobs:
     - run: nix build .#nixosConfigurations.mir.config.system.build.toplevel
     - run: nix flake check
 
+  build-saturnv:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v18
+      with:
+        extra_nix_config: |
+          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+    - run: nix build .#nixosConfigurations.saturnv.config.system.build.toplevel
+    - run: nix flake check
+
   build-home-x86_64linux:
     runs-on: ubuntu-latest
     steps:

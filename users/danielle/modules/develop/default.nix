@@ -30,6 +30,9 @@
     consul
     vault
     nomad
+
+    # mostly for WSL, but useful generally
+    socat
   ];
 
   # Current system default Go
