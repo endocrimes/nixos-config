@@ -8,9 +8,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, ... }@inputs: let
     overlays = [
       (final: prev: {
         docker = prev.docker.override { buildxSupport = true; };
@@ -54,6 +59,35 @@
         };
       };
     });
+
+    nixosConfigurations.saturnv = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules =
+        [ 
+          nixos-wsl.nixosModules.wsl
+          ({ pkgs, ... }: {
+          imports = [
+            ./hosts/saturnv/configuration.nix
+          ];
+
+          nix.registry.nixpkgs.flake = nixpkgs;
+          nix.nixPath = [
+            "nixpkgs=${nixpkgs}"
+          ];
+
+          nixpkgs.overlays = overlays;
+        })
+
+        home-manager.nixosModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.danielle = import ./users/danielle/home-manager.nix;
+          home-manager.extraSpecialArgs = {
+            isGUISystem = false;
+          };
+        }
+      ];
+    };
 
     nixosConfigurations.mir = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
