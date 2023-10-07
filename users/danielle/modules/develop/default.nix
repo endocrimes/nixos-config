@@ -23,18 +23,22 @@
     jq
     fzf
     ripgrep
+    tmux
 
     # HashiStack
     packer
     consul
     vault
     nomad
+
+    # mostly for WSL, but useful generally
+    socat
   ];
 
   # Current system default Go
   programs.go = {
     enable = true;
-    package = pkgs.go_1_19;
+    package = pkgs.go_1_21;
     goPath = lib.mkDefault "dev";
   };
 }
