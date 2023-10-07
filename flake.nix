@@ -56,6 +56,7 @@
 
         extraSpecialArgs = {
           isGUISystem = false;
+          isWSL2 = false;
         };
       };
     });
@@ -63,7 +64,7 @@
     nixosConfigurations.saturnv = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules =
-        [ 
+        [
           nixos-wsl.nixosModules.wsl
           ({ pkgs, ... }: {
           imports = [
@@ -84,6 +85,7 @@
           home-manager.users.danielle = import ./users/danielle/home-manager.nix;
           home-manager.extraSpecialArgs = {
             isGUISystem = false;
+            isWSL2 = true;
           };
         }
       ];
@@ -114,6 +116,7 @@
           home-manager.users.danielle = import ./users/danielle/home-manager.nix;
           home-manager.extraSpecialArgs = {
             isGUISystem = true;
+            isWSL2 = false;
           };
         }
       ];

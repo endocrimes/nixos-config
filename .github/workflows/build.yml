@@ -7,7 +7,7 @@ on:
       - master
 jobs:
   build-mir:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v18
@@ -18,7 +18,7 @@ jobs:
     - run: nix flake check
 
   build-saturnv:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v18
@@ -29,7 +29,7 @@ jobs:
     - run: nix flake check
 
   build-home-x86_64linux:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - uses: cachix/install-nix-action@v18

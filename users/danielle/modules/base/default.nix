@@ -1,4 +1,4 @@
-{ stdenv, config, pkgs, isGUISystem, ... }:
+{ stdenv, config, pkgs, isGUISystem, isWSL2, ... }:
 
 {
   # Let Home Manager install and manage itself.
@@ -11,9 +11,25 @@
     zsh
     htop
     gnupg
+    xdg-utils
   ] ++ lib.optionals (pkgs.stdenv.isLinux) [
     lm_sensors
+  ] ++ lib.optionals (isWSL2) [
+    wslu
   ];
+
+  xdg.mimeApps = {
+    enable = isWSL2;
+
+    defaultApplications = {
+      "text/html" = "wslview";
+      "x-scheme-handler/http" = "wslview";
+      "x-scheme-handler/https" = "wslview";
+      "x-scheme-handler/about" = "wslview";
+      "x-scheme-handler/unknown" = "wslview";
+      "x-scheme-handler/file" = "wslview";
+    };
+  };
 
   services.gpg-agent = {
     enable = pkgs.stdenv.isLinux;

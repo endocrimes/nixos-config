@@ -14,7 +14,14 @@
 
   wsl.enable = true;
   wsl.defaultUser = "danielle";
-  
+
+  users.users.danielle = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "docker" "plugdev" "networkmanager" ];
+    shell = pkgs.zsh;
+  };
+
+  programs.zsh.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
