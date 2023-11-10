@@ -30,6 +30,12 @@ in {
       xclip
     ]);
 
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   systemd.user.startServices = true;
 
   services.syncthing = { enable = pkgs.stdenv.isLinux; };

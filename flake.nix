@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    nixpkgs-main = {
+      url = "github:nixos/nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -15,9 +19,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, nixpkgs-main, ... }@inputs: let
     overlays = [
       (final: prev: {
+        mold-wrapped = nixpkgs-main.mold-wrapped;
         docker = prev.docker.override { buildxSupport = true; };
         vim_configurable = prev.vim_configurable.override {
           guiSupport = (if prev.stdenv.isDarwin then "none" else "gtk3");

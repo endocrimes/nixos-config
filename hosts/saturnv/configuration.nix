@@ -10,10 +10,28 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/default
   ];
 
   wsl.enable = true;
   wsl.defaultUser = "danielle";
+  wsl.docker-desktop.enable = true;
+  systemd.services.docker-desktop-proxy = {
+    description = "Docker Desktop proxy";
+    path = [ pkgs.mount ];
+    script = ''
+          ${config.wsl.wslConf.automount.root}/wsl/docker-desktop/docker-desktop-user-distro proxy --docker-desktop-root ${config.wsl.wslConf.automount.root}/wsl/docker-desktop "C:\Program Files\Docker\Docker\resources"
+    '';
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "30s";
+    };
+  };
+
+  users.groups.docker.members = [
+    config.wsl.defaultUser
+  ];
 
   users.users.danielle = {
     isNormalUser = true;

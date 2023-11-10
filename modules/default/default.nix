@@ -11,6 +11,8 @@
 
   time.timeZone = lib.mkDefault "Europe/Berlin";
 
+  environment.wordlist.enable = true;
+
   environment.shells = [ pkgs.zsh ];
   programs.zsh = {
     enable = true;
