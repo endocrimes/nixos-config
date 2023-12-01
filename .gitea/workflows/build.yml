@@ -10,7 +10,6 @@ jobs:
     runs-on: flake
     steps:
     - uses: actions/checkout@v3
-    - uses: DeterminateSystems/magic-nix-cache-action@main
     - run: nix build .#nixosConfigurations.mir.config.system.build.toplevel
     - run: nix flake check
 
@@ -18,7 +17,6 @@ jobs:
     runs-on: flake
     steps:
     - uses: actions/checkout@v3
-    - uses: DeterminateSystems/magic-nix-cache-action@main
     - run: nix build .#nixosConfigurations.saturnv.config.system.build.toplevel
     - run: nix flake check
 
@@ -26,5 +24,4 @@ jobs:
     runs-on: flake
     steps:
     - uses: actions/checkout@v3
-    - uses: DeterminateSystems/magic-nix-cache-action@main
     - run: nix build .#homeConfigurations.x86_64-linux.danielle_nogui.activationPackage
