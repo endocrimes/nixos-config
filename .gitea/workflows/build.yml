@@ -1,0 +1,27 @@
+name: "Build System Configurations"
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+jobs:
+  build-mir:
+    runs-on: flake
+    steps:
+    - uses: actions/checkout@v3
+    - run: nix build .#nixosConfigurations.mir.config.system.build.toplevel
+    - run: nix flake check
+
+  build-saturnv:
+    runs-on: flake
+    steps:
+    - uses: actions/checkout@v3
+    - run: nix build .#nixosConfigurations.saturnv.config.system.build.toplevel
+    - run: nix flake check
+
+  build-home-x86_64linux:
+    runs-on: flake
+    steps:
+    - uses: actions/checkout@v3
+    - run: nix build .#homeConfigurations.x86_64-linux.danielle_nogui.activationPackage
