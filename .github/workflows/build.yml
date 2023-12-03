@@ -48,6 +48,8 @@ jobs:
     - uses: webfactory/ssh-agent@v0.8.0
       with:
         ssh-private-key: ${{ secrets.GITEA_SYNC_KEY }}
+    - name: update known_hosts
+      run: ssh-keyscan -H git.hormonal.party >> ~/.ssh/known_hosts
     - run: git remote add gitea gitea@git.hormonal.party:danielle/nixos-config.git
     - run: git fetch gitea main
     - run: git push gitea main
