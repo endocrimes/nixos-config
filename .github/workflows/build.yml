@@ -39,3 +39,16 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - uses: DeterminateSystems/magic-nix-cache-action@main
     - run: nix build .#homeConfigurations.x86_64-linux.danielle_nogui.activationPackage
+
+  sync_to_gitea:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.GITEA_SYNC_KEY }}
+    - run: git remote add gitea gitea@git.hormonal.party:danielle/nixos-config.git
+    - run: git fetch gitea main
+    - run: git push gitea main
+
