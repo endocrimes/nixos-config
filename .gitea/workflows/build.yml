@@ -7,6 +7,8 @@ on:
 jobs:
   build-mir:
     runs-on: flake
+    env:
+      PATH: "/usr/bin:/bin:/run/current-system/sw/bin"
     steps:
     - uses: actions/checkout@v3
     - name: Setup Attic cache
