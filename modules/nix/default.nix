@@ -12,15 +12,15 @@
         "flakes"
       ];
 
-      # substituters = [
-      #   "https://nixcache.infra.terrible.systems/"
-      # ];
-      # trusted-substituters = [
-      #   "https://nixcache.infra.terrible.systems/"
-      # ];
-      # trusted-public-keys = [
-      #   "nixcache.infra.terrible.systems:BXjTXh35v6pyOf6kjkhd2T2Z1hXrCa4j/64HCwbZ5Mw="
-      # ];
+      substituters = [
+        "https://attic.fly.dev/danielle-personal"
+      ];
+      trusted-substituters = [
+        "https://attic.fly.dev/danielle-personal"
+      ];
+      trusted-public-keys = [
+        "danielle-personal:7S0LwNN3XpQ3IBpIyr/IVvHwIpMo9bk49JZ5LjNsPpk="
+      ];
     };
   };
 
