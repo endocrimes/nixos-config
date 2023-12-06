@@ -1,0 +1,23 @@
+name: "Sync to GitHub"
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync_to_github:
+    runs-on: ubuntu-latest
+    if: gitea.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.REPO_SYNC_KEY }}
+    - name: update known_hosts
+      run: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+    - run: git remote add github git@github.com:endocrimes/nixos-config.git
+    - run: git fetch github main
+    - run: git push github main
+
