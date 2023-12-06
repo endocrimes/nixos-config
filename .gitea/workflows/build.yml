@@ -9,6 +9,12 @@ jobs:
     runs-on: flake
     steps:
     - uses: actions/checkout@v3
+    - name: Setup Attic cache
+      uses: ryanccn/attic-action@v0
+      with:
+        endpoint: ${{ secrets.ATTIC_ENDPOINT }}
+        cache: ${{ secrets.ATTIC_CACHE }}
+        token: ${{ secrets.ATTIC_TOKEN }}
     - run: nix build .#nixosConfigurations.mir.config.system.build.toplevel
     - run: nix flake check
 
@@ -16,6 +22,12 @@ jobs:
     runs-on: flake
     steps:
     - uses: actions/checkout@v3
+    - name: Setup Attic cache
+      uses: ryanccn/attic-action@v0
+      with:
+        endpoint: ${{ secrets.ATTIC_ENDPOINT }}
+        cache: ${{ secrets.ATTIC_CACHE }}
+        token: ${{ secrets.ATTIC_TOKEN }}
     - run: nix build .#nixosConfigurations.saturnv.config.system.build.toplevel
     - run: nix flake check
 
@@ -23,6 +35,12 @@ jobs:
     runs-on: flake
     steps:
     - uses: actions/checkout@v3
+    - name: Setup Attic cache
+      uses: ryanccn/attic-action@v0
+      with:
+        endpoint: ${{ secrets.ATTIC_ENDPOINT }}
+        cache: ${{ secrets.ATTIC_CACHE }}
+        token: ${{ secrets.ATTIC_TOKEN }}
     - run: nix build .#homeConfigurations.x86_64-linux.danielle_nogui.activationPackage
 
   sync_to_github:
