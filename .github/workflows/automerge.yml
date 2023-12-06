@@ -13,7 +13,8 @@ on:
   pull_request_review:
     types:
       - submitted
-  check_suite:
+  workflow_run:
+    workflows: ["Build System Configurations"]
     types:
       - completed
   status: {}
