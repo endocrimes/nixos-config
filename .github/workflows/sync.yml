@@ -1,0 +1,23 @@
+name: "Push to gitea"
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '30 1 * * *'
+  push:
+    branches:
+      - main
+
+jobs:
+  sync_to_gitea:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.GITEA_SYNC_KEY }}
+    - name: update known_hosts
+      run: ssh-keyscan -H git.hormonal.party >> ~/.ssh/known_hosts
+    - run: git remote add gitea gitea@git.hormonal.party:danielle/nixos-config.git
+    - run: git fetch gitea main
+    - run: git push gitea main
+
