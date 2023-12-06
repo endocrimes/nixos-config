@@ -53,6 +53,6 @@ jobs:
     - name: update known_hosts
       run: ssh-keyscan -H git.hormonal.party >> ~/.ssh/known_hosts
     - run: git remote add gitea gitea@git.hormonal.party:danielle/nixos-config.git
-    - run: git pull --rebase gitea main
+    - run: git pull gitea main
     - run: git push gitea main
 
