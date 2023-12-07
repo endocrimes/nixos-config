@@ -6,10 +6,6 @@ in {
   imports = [
     ./modules/base
     ./modules/develop
-    ./modules/email
-    ./modules/graphical/i3
-    ./modules/workstation
-    ./modules/workworkwork
   ];
 
   programs.firefox = {
