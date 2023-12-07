@@ -10,12 +10,6 @@ My userland is then configured as part of my [dotfiles][dotfiles] repository and
 via [home-manager][home-manager], either as part of the system config, or by
 referencing this repository.
 
-## Systems Overview
-
-| name | description |
-| ---- | ----------- |
-| mir | Personal Workstation (Ryzen 3950x, RTX 3080, 64GB RAM) |
-
 Other systems live in [HormonalParty/systems](https://github.com/hormonalparty/systems).
 
 [dotfiles]: https://github.com/endocrimes/dotfiles
