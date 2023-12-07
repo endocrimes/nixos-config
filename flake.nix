@@ -95,37 +95,6 @@
         }
       ];
     };
-
-    nixosConfigurations.mir = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules =
-        [ ({ pkgs, ... }: {
-          imports = [
-            ./hosts/mir/configuration.nix
-          ];
-
-          nix.registry.nixpkgs.flake = nixpkgs;
-          nix.nixPath = ["nixpkgs=${nixpkgs}"];
-
-          networking.useDHCP = false;
-          networking.networkmanager.enable = true;
-
-          boot.initrd.network.ssh.authorizedKeys = sshPublicKeys;
-
-          nixpkgs.overlays = overlays;
-        })
-
-        home-manager.nixosModules.home-manager {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.danielle = import ./users/danielle/home-manager.nix;
-          home-manager.extraSpecialArgs = {
-            isGUISystem = true;
-            isWSL2 = false;
-          };
-        }
-      ];
-    };
   };
 }
 

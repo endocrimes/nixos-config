@@ -1,6 +1,16 @@
-{ stdenv, config, pkgs, isGUISystem, isWSL2, ... }:
+{ stdenv, config, pkgs, lib, isGUISystem, isWSL2, ... }:
 
-{
+let
+wslMimeApps = {
+  "text/html" = "wslview";
+  "x-scheme-handler/http" = "wslview";
+  "x-scheme-handler/https" = "wslview";
+  "x-scheme-handler/about" = "wslview";
+  "x-scheme-handler/unknown" = "wslview";
+  "x-scheme-handler/file" = "wslview";
+};
+whenWSL = attrs: if isWSL2 then attrs else {};
+in {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -18,18 +28,10 @@
     wslu
   ];
 
-  xdg.mimeApps = {
-    enable = isWSL2;
-
-    defaultApplications = {
-      "text/html" = "wslview";
-      "x-scheme-handler/http" = "wslview";
-      "x-scheme-handler/https" = "wslview";
-      "x-scheme-handler/about" = "wslview";
-      "x-scheme-handler/unknown" = "wslview";
-      "x-scheme-handler/file" = "wslview";
-    };
-  };
+  xdg.mimeApps = (whenWSL {
+    enable = true;
+    defaultApplications = wslMimeApps;
+  });
 
   services.gpg-agent = {
     enable = pkgs.stdenv.isLinux;
@@ -42,12 +44,10 @@
     maxCacheTtl = 7200;
     maxCacheTtlSsh = 7200;
 
-    pinentryFlavor = if isGUISystem then "gtk2" else "tty";
+    pinentryFlavor = "tty";
 
     extraConfig = ''
     allow-loopback-pinentry
     '';
-
-    grabKeyboardAndMouse = isGUISystem;
   };
 }

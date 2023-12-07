@@ -9,19 +9,6 @@ env:
   PATH: "/usr/bin:/bin:/run/current-system/sw/bin:/root/.nix-profile/bin"
 
 jobs:
-  build-mir:
-    runs-on: flake
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup Attic cache
-      uses: ryanccn/attic-action@v0
-      with:
-        endpoint: ${{ secrets.ATTIC_ENDPOINT }}
-        cache: ${{ secrets.ATTIC_CACHE }}
-        token: ${{ secrets.ATTIC_TOKEN }}
-    - run: nix build .#nixosConfigurations.mir.config.system.build.toplevel
-    - run: nix flake check
-
   build-saturnv:
     runs-on: flake
     steps:
