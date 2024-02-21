@@ -14,7 +14,8 @@
     github-cli
 
     awscli
-    google-cloud-sdk
+    (google-cloud-sdk.withExtraComponents
+      [google-cloud-sdk.components.gke-gcloud-auth-plugin])
 
     vim_configurable # Config for clipboard support
     shellcheck
@@ -33,6 +34,9 @@
 
     # mostly for WSL, but useful generally
     socat
+
+    # for interacting with the `dlancashire-public` registry
+    scaleway-cli
   ];
 
   # Current system default Go
