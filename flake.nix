@@ -17,9 +17,14 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl, nixpkgs-main, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, nixpkgs-main, attic }@inputs: let
     overlays = [
       (final: prev: {
         mold-wrapped = nixpkgs-main.mold-wrapped;
@@ -51,11 +56,13 @@
           inherit overlays system;
         };
 
+
         modules = [
           ./users/danielle/home-manager.nix
           {
             home.username = "danielle";
             home.homeDirectory = if system == "aarch64-darwin" then "/users/danielle" else "/home/danielle";
+            home.packages = [ attic.packages.${system}.default ];
           }
         ];
 
@@ -63,8 +70,7 @@
           isGUISystem = false;
           isWSL2 = false;
         };
-      };
-    });
+      };});
 
     nixosConfigurations.saturnv = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -80,6 +86,7 @@
           nix.nixPath = [
             "nixpkgs=${nixpkgs}"
           ];
+          environment.systemPackages = [ attic.packages."x86_64-linux".default ];
 
           nixpkgs.overlays = overlays;
         })
