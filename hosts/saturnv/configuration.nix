@@ -39,6 +39,15 @@
     shell = pkgs.zsh;
   };
 
+  environment.systemPackages = [
+    # The `docker` that comes from the WSL host cannot execute under nix, so
+    # we have to install our own.
+    pkgs.docker-client
+  ];
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [];
+
   programs.zsh.enable = true;
 
   # This value determines the NixOS release from which the default
