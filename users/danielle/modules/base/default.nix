@@ -44,7 +44,7 @@ in {
     maxCacheTtl = 7200;
     maxCacheTtlSsh = 7200;
 
-    pinentryFlavor = "tty";
+    pinentryPackage = pkgs.pinentry-tty;
 
     extraConfig = ''
     allow-loopback-pinentry
