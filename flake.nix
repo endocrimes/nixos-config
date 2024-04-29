@@ -4,12 +4,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    nixpkgs-main = {
-      url = "github:nixos/nixpkgs";
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixos-overlay = {
+      url = "git+ssh://git@github.com/endocrimes/nixos-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -24,10 +25,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-wsl, nixpkgs-main, attic }@inputs: let
+  outputs = { self, nixpkgs, home-manager, nixos-wsl, nixos-overlay, attic }@inputs: let
     overlays = [
+      nixos-overlay.overlays.default
       (final: prev: {
-        mold-wrapped = nixpkgs-main.mold-wrapped;
         docker = prev.docker.override { buildxSupport = true; };
         vim_configurable = prev.vim_configurable.override {
           guiSupport = (if prev.stdenv.isDarwin then "none" else "gtk3");
@@ -58,6 +59,7 @@
 
 
         modules = [
+          nixos-overlay.nixosModules.default
           ./users/danielle/home-manager.nix
           {
             home.username = "danielle";

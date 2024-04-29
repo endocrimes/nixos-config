@@ -130,6 +130,26 @@
         "type": "github"
       }
     },
+    "nixos-overlay": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1714412061,
+        "narHash": "sha256-Jn4fKa8+068gVSSwsq7+sRu2F/0Q9pDC5SAZPfa++w4=",
+        "ref": "refs/heads/main",
+        "rev": "13dbf30b2b766e8be362f40582ae007226ad566b",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://git@github.com/endocrimes/nixos-overlay"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/endocrimes/nixos-overlay"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -168,21 +188,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-main": {
-      "locked": {
-        "lastModified": 1714177369,
-        "narHash": "sha256-wZBSSKHfInXQYWGo4K78/8HUEpkHqXMFxvzm/bNqXM8=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "0d39633df0f60f368576e6d01e06ba967e78c8e8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1711460390,
@@ -203,9 +208,9 @@
       "inputs": {
         "attic": "attic",
         "home-manager": "home-manager",
+        "nixos-overlay": "nixos-overlay",
         "nixos-wsl": "nixos-wsl",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-main": "nixpkgs-main"
+        "nixpkgs": "nixpkgs"
       }
     },
     "systems": {
