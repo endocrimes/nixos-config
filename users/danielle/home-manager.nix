@@ -16,7 +16,6 @@ in {
 
   home.packages = with pkgs; [
     gnupg
-    pinentry
     syncthing
     ripgrep
   ] ++ (whenGUI
