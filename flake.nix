@@ -21,7 +21,8 @@
 
     attic = {
       url = "github:zhaofengli/attic";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # Attic gets its own copy of nixpkgs because building it is frustrating.
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 

@@ -12,6 +12,7 @@ desc_system() {
 }
 
 if [ "$#" -eq 0 ]; then
+  echo "Fetching system info"
   sys="$(desc_system | jq -r)"
 else
   sys="$1"
@@ -26,6 +27,7 @@ if [[ -z "$DISABLE_LOCAL_CACHE" ]]; then
   options="$options --option substituters https://cache.nixos.org"
 fi
 
+echo "Building home for: $sys"
 nix build --extra-experimental-features "nix-command flakes" $options --out-link "$link" .#homeConfigurations.$sys.danielle_nogui.activationPackage
 path="$(readlink "$link")"
 rm -rf "$linkdir"
