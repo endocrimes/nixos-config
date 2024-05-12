@@ -27,7 +27,7 @@
     enable = true;
     ipv4 =  true;
     ipv6 = true;
-    nssmdns = true;
+    nssmdns4 = true;
   };
 
   # Minimal tools required for running a machine

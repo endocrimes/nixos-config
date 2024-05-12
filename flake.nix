@@ -2,7 +2,7 @@
   description = "NixOS systems and tools";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -89,6 +89,8 @@
           nix.nixPath = [
             "nixpkgs=${nixpkgs}"
           ];
+          nix.package = pkgs.lix;
+
           environment.systemPackages = [ attic.packages."x86_64-linux".default ];
 
           nixpkgs.overlays = overlays;
