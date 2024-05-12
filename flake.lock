@@ -135,11 +135,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1715550696,
-        "narHash": "sha256-CIsC2j6PEBzpK8z9Ju70W9MbgWIe5hliUq66aaU8b9Q=",
+        "lastModified": 1715553565,
+        "narHash": "sha256-jsXpS9429cUVngNHoZhAcRAhIxy7ZZuQHbLmVW7G40Q=",
         "ref": "refs/heads/main",
-        "rev": "cb826dc1bbc2decf7c012d19b6b6a19a25771f7d",
-        "revCount": 4,
+        "rev": "efa15ad124b67478546f46fdaffa4d8e9d86fde3",
+        "revCount": 5,
         "type": "git",
         "url": "ssh://git@github.com/endocrimes/nixos-overlay"
       },
