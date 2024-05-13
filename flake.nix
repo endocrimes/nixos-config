@@ -10,7 +10,7 @@
     };
 
     nixos-overlay = {
-      url = "git+ssh://git@github.com/endocrimes/nixos-overlay";
+      url = "github:endocrimes/nixos-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
