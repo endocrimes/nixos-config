@@ -13,9 +13,12 @@
     ../../modules/default
   ];
 
-  wsl.enable = true;
-  wsl.defaultUser = "danielle";
-  wsl.docker-desktop.enable = true;
+  wsl = {
+    enable = true;
+    defaultUser = "danielle";
+    docker-desktop.enable = true;
+  };
+
   systemd.services.docker-desktop-proxy = {
     description = "Docker Desktop proxy";
     path = [ pkgs.mount ];
