@@ -37,12 +37,17 @@
 
     # for interacting with the `dlancashire-public` registry
     scaleway-cli
+
+    # Kubernetes
+    kubectl
+    kubernetes-helm
+    k9s
   ];
 
   # Current system default Go
   programs.go = {
     enable = true;
-    package = pkgs.go_1_22;
+    package = pkgs.go_1_23;
     goPath = lib.mkDefault "dev";
   };
 }
