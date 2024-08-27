@@ -27,8 +27,15 @@ if [[ -z "$DISABLE_LOCAL_CACHE" ]]; then
   options="$options --option substituters https://cache.nixos.org"
 fi
 
-echo "Building home for: $sys"
-nix build --extra-experimental-features "nix-command flakes" $options --out-link "$link" .#homeConfigurations.$sys.danielle_nogui.activationPackage
+package="danielle_nogui"
+hostname="$(hostname -s)"
+
+if [[ "$hostname" = "sfyri" ]]; then
+  package="danielle_gui"
+fi
+
+echo "Building $package home for: $sys"
+nix build --extra-experimental-features "nix-command flakes" $options --out-link "$link" .#homeConfigurations.$sys.$package.activationPackage
 path="$(readlink "$link")"
 rm -rf "$linkdir"
 

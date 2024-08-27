@@ -51,32 +51,46 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM3bsRW8tLBO3PmpXPrpE635Zu7qOWgWvDRrTm2QQh8Z"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINx6NhFAcuwyR3ralO+ikopApVQieJtXHieLkQlQN/dn"
       ];
+
+      mkHomeConfiguration = { system, extraSpecialArgs }:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs {
+            config.allowUnfree = true;
+            config.xdg.configHome = "/home/danielle/.config";
+            inherit overlays system;
+          };
+
+          modules = [
+            nixos-overlay.nixosModules.default
+            ./users/danielle/home-manager.nix
+            {
+              home.username = "danielle";
+              home.homeDirectory = if system == "aarch64-darwin" then
+                "/users/danielle"
+              else
+                "/home/danielle";
+              home.packages = [ attic.packages.${system}.default ];
+            }
+          ];
+
+          inherit extraSpecialArgs;
+        };
     in {
       homeConfigurations =
         nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ]
         (system: {
-          danielle_nogui = home-manager.lib.homeManagerConfiguration {
-            pkgs = import nixpkgs {
-              config.allowUnfree = true;
-              config.xdg.configHome = "/home/danielle/.config";
-              inherit overlays system;
-            };
-
-            modules = [
-              nixos-overlay.nixosModules.default
-              ./users/danielle/home-manager.nix
-              {
-                home.username = "danielle";
-                home.homeDirectory = if system == "aarch64-darwin" then
-                  "/users/danielle"
-                else
-                  "/home/danielle";
-                home.packages = [ attic.packages.${system}.default ];
-              }
-            ];
-
+          danielle_nogui = mkHomeConfiguration {
+            inherit system;
             extraSpecialArgs = {
               isGUISystem = false;
+              isWSL2 = false;
+            };
+          };
+
+          danielle_gui = mkHomeConfiguration {
+            inherit system;
+            extraSpecialArgs = {
+              isGUISystem = true;
               isWSL2 = false;
             };
           };
@@ -100,9 +114,7 @@
           })
 
           vscode-server.nixosModules.default
-          ({ config, pkgs, ... }: {
-            services.vscode-server.enable = true;
-          })
+          ({ config, pkgs, ... }: { services.vscode-server.enable = true; })
           ({ pkgs, ... }: {
             systemd.user = {
               paths.vscode-remote-workaround = {

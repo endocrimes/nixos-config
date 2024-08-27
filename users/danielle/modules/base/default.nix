@@ -44,10 +44,14 @@ in {
     maxCacheTtl = 7200;
     maxCacheTtlSsh = 7200;
 
-    pinentryPackage = pkgs.pinentry-tty;
+    # If not gui, and not WSL2, then we assume that pinentry-gnome3 is already
+    # installed - this won't be true when sfyri moves to nixos.
+    pinentryPackage = if !isGUISystem || isWSL2 then pkgs.pinentry-tty else null;
 
-    extraConfig = ''
-    allow-loopback-pinentry
-    '';
+    extraConfig = lib.concatStringsSep "\n"
+      ([ "allow-loopback-pinentry" ]
+      ++ lib.optionals (isGUISystem) [
+        "pinentry-program /usr/bin/pinentry-gnome3"
+      ]);
   };
 }
