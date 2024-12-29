@@ -96,6 +96,37 @@
           };
         });
 
+      nixosConfigurations.martello = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          nixos-wsl.nixosModules.wsl
+          ({ pkgs, ... }: {
+            imports = [ ./hosts/martello/configuration.nix ];
+
+            nix.registry.nixpkgs.flake = nixpkgs;
+            nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
+            nix.package = pkgs.lix;
+
+            environment.systemPackages =
+              [ attic.packages."x86_64-linux".default ];
+
+            nixpkgs.overlays = overlays;
+          })
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.danielle =
+              import ./users/danielle/home-manager.nix;
+            home-manager.extraSpecialArgs = {
+              isGUISystem = false;
+              isWSL2 = true;
+            };
+          }
+        ];
+      };
+
+
       nixosConfigurations.saturnv = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
